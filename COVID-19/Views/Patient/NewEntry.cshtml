@@ -1,0 +1,117 @@
+﻿@model COVID_19.Models.PatientModel
+@{
+    ViewBag.Title = "NewEntry";
+}
+
+<h2>NewEntry</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <form class="form-horizontal">
+        <fieldset>
+            <legend>Nuevo ingreso</legend>
+
+            <div class="form-group">
+                <label for="inputNombre" class="col-lg-2 control-label">Nombre</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" id="inputNombre" placeholder="Nombre del paciente" name="Nombre">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputApellido" class="col-lg-2 control-label">Apellido</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" id="inputApellido" placeholder="Apellido del paciente" name="Apellido">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputDate" class="col-lg-2 control-label">Fecha De Nacimiento</label>
+                <div class="col-lg-10">
+                    @Html.EditorFor(model => model.FechaDeNacimiento, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.FechaDeNacimiento, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputCui" class="col-lg-2 control-label">CUI</label>
+                <div class="col-lg-10">
+                    <input type="number" class="form-control" id="inputCui" placeholder="CUI del paciente" name="Cui">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputDepartamento" class="col-lg-2 control-label">Departamento</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" id="inputDepartamento" placeholder="Departamento de residencia" name="Departamento">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputMunicipio" class="col-lg-2 control-label">Municipio</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" id="inputMunicipio" placeholder="Municipio de residencia" name="Municipio">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-2 control-label">Sintomas</label>
+                <div class="col-lg-10">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"> Fiebre
+                        </label>
+                    </div>
+
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"> Tos seca
+                        </label>
+                    </div>
+
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"> Cansancio
+                        </label>
+                    </div>
+
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"> Dificultad respiratoria
+                        </label>
+                    </div>
+
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"> Escalofríos y dolores corporales
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+            </div>
+
+
+            <div class="form-group">
+                <label for="textDescripcion" class="col-lg-2 control-label">Descripción</label>
+                <div class="col-lg-10">
+                    <input type="file" name="postedFile" />
+                    <span class="help-block">Descripción del posible contagio</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-2">
+                    <button type="reset" class="btn btn-default">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+
+        </fieldset>
+    </form>
+}
