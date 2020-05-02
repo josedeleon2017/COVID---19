@@ -1,4 +1,4 @@
-﻿@model COVID_19.Models.PersonModel
+﻿@model COVID_19.Models.PatientModel
 @{
     ViewBag.Title = "Search";
 }
@@ -87,6 +87,25 @@
             <a class="list-group-item">
                 <h6 class="list-group-item-heading">Edad</h6>
                 <p class="list-group-item-text">@Html.DisplayFor(model => model.Edad)</p>
+            </a>
+        </div>
+
+        <div class="list-group">
+            <a class="list-group-item">
+                <h6 class="list-group-item-heading">Prioridad</h6>
+                <p class="list-group-item-text">@Html.DisplayFor(model => model.Prioridad)</p>
+            </a>
+            <a class="list-group-item">
+                <h6 class="list-group-item-heading">Fecha de ingreso</h6>
+                <p class="list-group-item-text">@Html.DisplayFor(model => model.FechaDeIngreso)</p>
+            </a>
+            <a class="list-group-item">
+                <h6 class="list-group-item-heading">Estatus</h6>
+                <p class="list-group-item-text">@Html.DisplayFor(model => model.Estatus)</p>
+            </a>
+            <a class="list-group-item">
+                <h6 class="list-group-item-heading">Categoria</h6>
+                <p class="list-group-item-text">@Html.DisplayFor(model => model.Categoria)</p>
             </a>
         </div>
 

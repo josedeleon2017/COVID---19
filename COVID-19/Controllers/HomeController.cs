@@ -85,28 +85,26 @@ namespace COVID_19.Controllers
                     }                  
                 }
 
-                PersonModel person1 = new PersonModel { Nombre = "Jose", Apellido="De Leon", CUI="2996768110101", Departamento="Guatemala", Edad="19 años", FechaDeNacimiento=Convert.ToDateTime("09/09/2000"), Municipio="Guatemala"};
-                PersonModel person2 = new PersonModel { Nombre = "Vinicio" };
-                PersonModel person3 = new PersonModel { Nombre = "De Leon" };
-                PersonModel person4 = new PersonModel { Nombre = "Jimenez" };
-                PersonModel person5 = new PersonModel { Nombre = "Javier" };
+                PatientModel person1 = new PatientModel { CUI="51" };
+                PatientModel person2 = new PatientModel { CUI = "91" };
+                PatientModel person3 = new PatientModel { CUI = "7" };
+                PatientModel person4 = new PatientModel { CUI = "9" };
+                PatientModel person5 = new PatientModel { CUI = "99" };
 
-                PersonModel.HashTable_Add("GU", person1);
-                PersonModel.HashTable_Add("GU", person2);
-                PersonModel.HashTable_Add("GU", person3);
-                PersonModel.HashTable_Add("GU", person4);
-                PersonModel.HashTable_Add("GU", person5);
+                PatientModel patient1 = PatientModel.Tree_Search(person1);
+                PatientModel patient2 = PatientModel.Tree_Search(person2);
+                PatientModel patient3 = PatientModel.Tree_Search(person3);
+                PatientModel patient4 = PatientModel.Tree_Search(person4);
+                PatientModel patient5 = PatientModel.Tree_Search(person5);
 
-                int firstIndicator = PersonModel.HashTable_CountEmptys("GU");
-                string positions1 = PersonModel.HashTable_Positions("GU");
+                Storage.Instance.PatientHashTable.Add("GU", patient1);
+                Storage.Instance.PatientHashTable.Add("GU", patient2);
+                Storage.Instance.PatientHashTable.Add("GU", patient3);
+                Storage.Instance.PatientHashTable.Add("GU", patient4);
+                Storage.Instance.PatientHashTable.Add("GU", patient5);
 
-                PersonModel personResult = PersonModel.HashTable_Find("GU-3");
+                int firstIndicator = Storage.Instance.PatientHashTable.CountEmptys("GU");
 
-
-                int SecondIndicator = PersonModel.HashTable_CountEmptys("GU");
-                string positions2 = PersonModel.HashTable_Positions("GU");
-
-                List<PersonModel> listTest = Storage.Instance.HospitalHashTable["GU"].ToList();
 
                 return View();
             }

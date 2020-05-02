@@ -11,8 +11,9 @@
 
 
 <h2>BÚSQUEDA</h2>
-
-
+<center>
+    <h4>@ViewBag.Result</h4>
+</center>
 
 <hr />
 
@@ -21,24 +22,24 @@
     <form class="form-horizontal">
         <fieldset>
             <div class="form-group">
-                <label for="inputNombre" class="col-lg-2 control-label">Nombre</label>
+                <label for="inputNombre" class="col-lg-2 control-label">Nombre<span class="text-danger">*</span></label>
                 <div class="col-lg-10">
                     <input type="text" class="form-control" id="inputNombre" placeholder="Nombre" name="Nombre">
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="inputApellido" class="col-lg-2 control-label">Apellido</label>
+                <label for="inputApellido" class="col-lg-2 control-label">Apellido<span class="text-danger">*</span></label>
                 <div class="col-lg-10">
                     <input type="text" class="form-control" id="inputApellido" placeholder="Apellido" name="Apellido">
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="inputCUI" class="col-lg-2 control-label">CUI</label>
+                <label for="inputCUI" class="col-lg-2 control-label">CUI<span class="text-danger">*</span></label>
                 <div class="col-lg-10">
                     <input type="text" class="form-control" id="inputCUI" placeholder="CUI" name="CUI">
-                    <h5>*Rellene al menos un campo</h5>
+                    <h5><span class="text-danger">*</span>Rellene al menos un campo</h5>
                 </div>
             </div>
 

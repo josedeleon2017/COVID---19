@@ -67,14 +67,14 @@ namespace COVID_19.Controllers
         }
 
         // GET: Hospital/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(string id)
         {
             return View();
         }
 
         // POST: Hospital/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(string id, FormCollection collection)
         {
             try
             {
@@ -100,11 +100,11 @@ namespace COVID_19.Controllers
             ViewBag.Porcentaje = Convert.ToString(Math.Round(Porcentaje, 2)) + "%";
             ViewBag.Recuperados = Recuperados;
 
-            ViewBag.HospitalGuatemala = PersonModel.HashTable_CountEmptys("GU");
-            ViewBag.HospitalEscuintla = PersonModel.HashTable_CountEmptys("ES");
-            ViewBag.HospitalQuetzaltenango = PersonModel.HashTable_CountEmptys("QZ");
-            ViewBag.HospitalChiquimula = PersonModel.HashTable_CountEmptys("CQ");
-            ViewBag.HospitalPeten = PersonModel.HashTable_CountEmptys("PE");
+            ViewBag.HospitalGuatemala = Storage.Instance.PatientHashTable.CountEmptys("GU");
+            ViewBag.HospitalEscuintla = Storage.Instance.PatientHashTable.CountEmptys("ES");
+            ViewBag.HospitalQuetzaltenango = Storage.Instance.PatientHashTable.CountEmptys("QZ");
+            ViewBag.HospitalChiquimula = Storage.Instance.PatientHashTable.CountEmptys("CQ");
+            ViewBag.HospitalPeten = Storage.Instance.PatientHashTable.CountEmptys("PE");
             return View();
         }
 
@@ -119,16 +119,16 @@ namespace COVID_19.Controllers
             try
             {
                 string HashCode = collection["Hash"];
-                if(Storage.Instance.HospitalHashTable.ContainsKey(HashCode.Substring(0, 2)))
+                if (Storage.Instance.PatientHashTable.Contains(HashCode.Substring(0, 2)))
                 {
                     ViewBag.Result = "[ " + HashCode + " ]";
-                    PersonModel personResult = PersonModel.HashTable_Find(HashCode);
-                    if (personResult == null)
+                    PatientModel patientResult = Storage.Instance.PatientHashTable.Find(HashCode);
+                    if (patientResult == null)
                     {
                         ViewBag.Result = "[ CAMA VACÍA ]";
                         return View();
                     }
-                    return View(personResult);
+                    return View(patientResult);
                 }
                 else
                 {
@@ -144,8 +144,8 @@ namespace COVID_19.Controllers
 
         public ActionResult Admin_Guatemala()
         {
-            ViewBag.CamasDisponibles = PersonModel.HashTable_Positions("GU");
-            return View(Storage.Instance.PersonTree.ToInOrden());
+            ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("GU"); 
+            return View(Storage.Instance.PatientHashTable.ToList("GU"));
         }
 
         [HttpPost]
@@ -153,8 +153,18 @@ namespace COVID_19.Controllers
         {
             try
             {
-
-                return RedirectToAction("Index");
+                //AGREGAR INSERCION DEL HEAP
+                if (!Storage.Instance.PatientHashTable.isFull("GU"))
+                {
+                    ViewBag.Result = "Paciente ingresado exitosamente";
+                    // PatientModel patient = Storage.Instance.Heap.RemoveRoot();
+                    //PatientModel.HashTable_Add("GU", patient);
+                }
+                else
+                {
+                    ViewBag.Result = "Camas llenas, el paciente permance en la cola";
+                }
+                return View();
             }
             catch
             {
@@ -162,5 +172,115 @@ namespace COVID_19.Controllers
             }
         }
 
+        public ActionResult Remove_Guatemala(string id)
+        {
+            PatientModel.HashTable_Delete("GU", id);
+            return RedirectToAction("Admin_Guatemala");
+        }
+
+
+        public ActionResult Admin_Escuintla()
+        {
+            ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("ES");
+            return View(Storage.Instance.PatientHashTable.ToList("ES"));
+        }
+
+        [HttpPost]
+        public ActionResult Admin_Escuintla(FormCollection collection)
+        {
+            try
+            {
+                //AGREGAR INSERCION DEL HEAP
+                return View();
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        public ActionResult Remove_Escuintla(string id)
+        {
+            PatientModel.HashTable_Delete("ES", id);
+            return RedirectToAction("Admin_Escuintla");
+        }
+
+        public ActionResult Admin_Quetzaltenango()
+        {
+            ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("QZ");
+            return View(Storage.Instance.PatientHashTable.ToList("QZ"));
+        }
+
+        [HttpPost]
+        public ActionResult Admin_Quetzaltenango(FormCollection collection)
+        {
+            try
+            {
+                //AGREGAR INSERCION DEL HEAP
+                return View();
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        public ActionResult Remove_Quetzaltenango(string id)
+        {
+            PatientModel.HashTable_Delete("QZ", id);
+            return RedirectToAction("Admin_Quetzaltenango");
+        }
+
+        public ActionResult Admin_Chiquimula()
+        {
+            ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("CQ");
+            return View(Storage.Instance.PatientHashTable.ToList("CQ"));
+        }
+
+        [HttpPost]
+        public ActionResult Admin_Chiquimula(FormCollection collection)
+        {
+            try
+            {
+                //AGREGAR INSERCION DEL HEAP
+                return View();
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        public ActionResult Remove_Chiquimula(string id)
+        {
+            PatientModel.HashTable_Delete("CQ", id);
+            return RedirectToAction("Admin_Chiquimula");
+        }
+
+        public ActionResult Admin_Peten()
+        {
+            ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("PE");
+            return View(Storage.Instance.PatientHashTable.ToList("PE"));
+        }
+
+        [HttpPost]
+        public ActionResult Admin_Peten(FormCollection collection)
+        {
+            try
+            {
+                //AGREGAR INSERCION DEL HEAP
+                return View();
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        public ActionResult Remove_Peten(string id)
+        {
+            PatientModel.HashTable_Delete("PE", id);
+            return RedirectToAction("Admin_Peten");
+        }
     }
 }

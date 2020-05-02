@@ -108,20 +108,35 @@ namespace COVID_19.Controllers
 
                 if (Nombre == "" && Apellido == "" && CUI == "")
                 {
-                    return View("Error");
+                    ViewBag.Result = "Debe llenar al menos un campo requerido";
+                    return View(Storage.Instance.ResultList);
                 }
-
                 if (CUI != "")
                 {
                     PersonModel personToSearch = new PersonModel { CUI = CUI };
                     Storage.Instance.ResultList.Add(PersonModel.Tree_Search(personToSearch));
                     return View(Storage.Instance.ResultList);
                 }
-                else
+                if (Nombre != "" && Apellido != "")
                 {
-                    Storage.Instance.ResultList = PersonModel.CustomTree_Filter(Nombre);
+                    string key = Nombre + Apellido;
+                    Storage.Instance.ResultList = PersonModel.CustomTree_Filter(key).Where(x=>x.Nombre==Nombre && x.Apellido==Apellido).ToList();
                     return View(Storage.Instance.ResultList);
                 }
+                if (Nombre != "" || Apellido != "")
+                {
+                    if (Nombre != "")
+                    {
+                        Storage.Instance.ResultList = PersonModel.CustomTree_Filter(Nombre).Where(x => x.Nombre == Nombre).ToList();
+                        return View(Storage.Instance.ResultList);
+                    }
+                    else
+                    {
+                        Storage.Instance.ResultList = PersonModel.CustomTree_Filter(Apellido).Where(x => x.Apellido == Apellido).ToList();
+                        return View(Storage.Instance.ResultList);
+                    }
+                }
+                return View();
             }
             catch
             {

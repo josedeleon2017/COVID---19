@@ -207,6 +207,23 @@ namespace COVID_19.Models
             return Storage.Instance.PatientTree.Find(key);
         }
 
+        //HASH
+        public static void HashTable_Add(string key, PatientModel patient)
+        {
+            Storage.Instance.PatientHashTable.Add(key,patient);
+        }
+        public static void HashTable_Delete(string key, string datakey)
+        {
+            Storage.Instance.PatientHashTable.Comparer = PatientComparison;
+            Storage.Instance.PatientHashTable.Remove(key, datakey);
+        }
+
+        public static Func<PatientModel, string, int> PatientComparison = delegate (PatientModel patient, string cui)
+        {
+            if (patient.CUI == cui) return 0;
+            return -1;
+        };
+
         //INSERT HEAP
         public static void Heap_Add(PatientModel patient)
         {
