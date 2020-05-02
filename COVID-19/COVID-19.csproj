@@ -121,6 +121,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HospitalController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
     <Compile Include="Global.asax.cs">
@@ -167,12 +168,15 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\testCSV.cshtml" />
     <Content Include="Views\Patient\NewEntry.cshtml" />
+    <Content Include="Views\Hospital\Simulation.cshtml" />
+    <Content Include="Views\Person\Search.cshtml" />
+    <Content Include="Views\Person\Profile.cshtml" />
+    <Content Include="Views\Hospital\Search.cshtml" />
+    <Content Include="Views\Hospital\Admin_Guatemala.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Person\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

@@ -1,0 +1,121 @@
+﻿@model IEnumerable<COVID_19.Models.PersonModel>
+
+@{
+    ViewBag.Title = "Search_Person";
+}
+
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink("Inicio", "Index", "Home")</li>
+        <li class="active">Búsqueda</li>
+    </ul>
+
+
+<h2>BÚSQUEDA</h2>
+
+
+
+<hr />
+
+@using (Html.BeginForm())
+{
+    <form class="form-horizontal">
+        <fieldset>
+            <div class="form-group">
+                <label for="inputNombre" class="col-lg-2 control-label">Nombre</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" id="inputNombre" placeholder="Nombre" name="Nombre">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputApellido" class="col-lg-2 control-label">Apellido</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" id="inputApellido" placeholder="Apellido" name="Apellido">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputCUI" class="col-lg-2 control-label">CUI</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" id="inputCUI" placeholder="CUI" name="CUI">
+                    <h5>*Rellene al menos un campo</h5>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-2">
+                    <button type="reset" class="btn btn-default">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+
+        </fieldset>
+    </form>
+}
+
+
+<br />
+<br />
+
+<table class="table">
+    <tr>
+        <th>
+            CUI
+        </th>
+        <th>
+            Nombre
+        </th>
+        <th>
+            Apellido
+        </th>
+        <th>
+            Fecha de nacimiento
+        </th>
+        <th>
+            Departamento
+        </th>
+        <th>
+            Municipio
+        </th>
+        <th>
+            Edad
+        </th>
+        <th>
+            Perfil
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CUI)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Apellido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaDeNacimiento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Departamento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Municipio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Edad)
+            </td>
+            <td>
+                @Html.ActionLink("Ver", "Profile", new { id = item.CUI })
+            </td>
+        </tr>
+    }
+
+</table>
+<h6>@ViewBag.StopWatch</h6>

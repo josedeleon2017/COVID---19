@@ -26,9 +26,31 @@ namespace COVID_19.Helpers
         public bool first_load = true;
 
         //ESTRUCTURAS
-        public NoLinealStructures.Structures.Tree<PersonModel> PersonsTree = new NoLinealStructures.Structures.Tree<PersonModel>();
 
-        
 
+        /// <summary>
+        /// Árbol AVL de personas, sirve como primer filtro para la búsqueda de pacientes (llave CUI)
+        /// </summary>
+        public NoLinealStructures.Structures.Tree<PersonModel> PersonTree = new NoLinealStructures.Structures.Tree<PersonModel>();
+
+        /// <summary>
+        /// Árbol AVL de customizado de personas, sirve para optimizar la busqueda por nombre y apellido (llave Nombre+Apellido+Id)
+        /// </summary>
+        public NoLinealStructures.Structures.Tree<PersonModel> CustomPersonTree = new NoLinealStructures.Structures.Tree<PersonModel>();
+
+        /// <summary>
+        /// Árbol AVL de pacientes, sirve para mostrar la descripción completa de la persona (llave CUI)
+        /// </summary>
+        public NoLinealStructures.Structures.Tree<PatientModel> PatientTree = new NoLinealStructures.Structures.Tree<PatientModel>();       
+
+        /// <summary>
+        /// Lista simplemente enlazada de personas, sirve para mostrar el resultado de la búsqueda o filtro
+        /// </summary>
+        public List<PersonModel> ResultList = new List<PersonModel>();
+
+        /// <summary>
+        /// Tabla Hash de pacientes, sirve para guardar los datos del hospital
+        /// </summary>
+        public Dictionary<string, PersonModel[]> HospitalHashTable = new Dictionary<string, PersonModel[]>();
     }
 }

@@ -1,0 +1,104 @@
+﻿@model COVID_19.Models.PatientModel
+
+@{
+    ViewBag.Title = "PatientProfile";
+}
+
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink("Inicio", "Index", "Home")</li>
+        <li>@Html.ActionLink("Búsqueda", "Search", "Person")</li>
+        <li class="active">Perfil</li>
+    </ul>
+
+<h2>Perfil</h2>
+
+<hr />
+<div class="row">
+
+    <div class="col-md-2 text-center">
+        <img src="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png" height="165">
+        <div class="list-group">
+            <a class="list-group-item">
+                <h6 class="list-group-item-heading">Prioridad</h6>
+                <p class="list-group-item-text"> @Html.DisplayFor(model => model.Prioridad)</p>
+            </a>
+        </div>
+    </div>
+
+    <div class="col-md-10">
+        <div class="list-group">
+            <a class="list-group-item">
+                <h6 class="list-group-item-heading">Nombre</h6>
+                <p class="list-group-item-text">@Html.DisplayFor(model => model.Nombre)</p>
+            </a>
+            <a class="list-group-item">
+                <h6 class="list-group-item-heading">Apellido</h6>
+                <p class="list-group-item-text">@Html.DisplayFor(model => model.Apellido)</p>
+            </a>
+            <a class="list-group-item">
+                <h6 class="list-group-item-heading">Fecha de nacimiento</h6>
+                <p class="list-group-item-text">@Html.DisplayFor(model => model.FechaDeNacimiento)</p>
+            </a>
+            <a class="list-group-item">
+                <h6 class="list-group-item-heading">CUI</h6>
+                <p class="list-group-item-text">@Html.DisplayFor(model => model.CUI)</p>
+            </a>
+            <a class="list-group-item">
+                <h6 class="list-group-item-heading">Departamento</h6>
+                <p class="list-group-item-text">@Html.DisplayFor(model => model.Departamento)</p>
+            </a>
+            <a class="list-group-item">
+                <h6 class="list-group-item-heading">Municipio</h6>
+                <p class="list-group-item-text">@Html.DisplayFor(model => model.Municipio)</p>
+            </a>
+            <a class="list-group-item">
+                <h6 class="list-group-item-heading">Edad</h6>
+                <p class="list-group-item-text">@Html.DisplayFor(model => model.Edad)</p>
+            </a>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="list-group">
+            <a class="list-group-item">
+                <h6 class="list-group-item-heading">Sintomas</h6>
+                <p class="list-group-item-text">@Html.DisplayFor(model => model.Sintomas)</p>
+            </a>
+            <a class="list-group-item">
+                <h6 class="list-group-item-heading">Descripción</h6>
+                <p class="list-group-item-text">@Html.DisplayFor(model => model.Descripcion)</p>
+            </a>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="list-group">
+            <a class="list-group-item">
+                <h6 class="list-group-item-heading">Estatus</h6>
+                <p class="list-group-item-text"> @Html.DisplayFor(model => model.Estatus)</p>
+            </a>
+            <a class="list-group-item">
+                <h6 class="list-group-item-heading">Categoría</h6>
+                <p class="list-group-item-text"> @Html.DisplayFor(model => model.Categoria)</p>
+            </a>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="list-group">
+            <a class="list-group-item">
+                <h6 class="list-group-item-heading">Hospital</h6>
+                <p class="list-group-item-text">@Html.DisplayFor(model => model.Hospital)</p>
+            </a>
+            <a class="list-group-item">
+                <h6 class="list-group-item-heading">Fecha de ingreso</h6>
+                <p class="list-group-item-text">@Html.DisplayFor(model => model.FechaDeIngreso)</p>
+            </a>
+        </div>
+    </div>
+</div>
+
+

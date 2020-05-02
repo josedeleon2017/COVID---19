@@ -16,9 +16,6 @@ namespace COVID_19.Controllers
         {
             try
             {
-
-                LinkedList<PatientModel> patientList = new LinkedList<PatientModel>();
-
                 if (Storage.Instance.first_load)
                 {
                     string Path_users = Server.MapPath("~/App_Data/");
@@ -36,6 +33,32 @@ namespace COVID_19.Controllers
                                 Regex regx = new Regex(";" + "(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
                                 string[] line = regx.Split(row);
 
+                                string currentAge = PersonModel.CalcularEdad(Convert.ToDateTime(line[2]));
+                                if (currentAge == null)
+                                {
+                                    return View("Error");
+                                }
+                                var currentPerson = new PersonModel
+                                {
+                                    Nombre = line[0],
+                                    Apellido = line[1],
+                                    FechaDeNacimiento = Convert.ToDateTime(line[2]),
+                                    CUI = line[3],
+                                    Departamento = line[4],
+                                    Municipio = line[5],
+                                    Edad = currentAge,
+                                };
+                                int currentPriority = PatientModel.AsignarPrioridad(currentAge, line[8]);
+                                if (currentPriority == -1)
+                                {
+                                    return View("Error");
+                                };
+                                string currentCategory = PatientModel.DescripcionPrioridad(currentPriority);
+                                string currentHospital = PatientModel.AsignarHospital(line[4]);
+                                if (currentHospital == "")
+                                {
+                                    return View("Error");
+                                }
                                 var currentPatient = new PatientModel
                                 {
                                     Nombre = line[0],
@@ -44,39 +67,46 @@ namespace COVID_19.Controllers
                                     CUI = line[3],
                                     Departamento = line[4],
                                     Municipio = line[5],
-                                    Edad = PersonModel.CalcularEdad(Convert.ToDateTime(line[2])),
-
+                                    Edad = currentAge,
                                     Sintomas = line[6],
-                                    Descripcion = line[7],
-                                    Estatus = line[8].ToUpper(),
-                                    Categoria = PatientModel.DescripcionPrioridad(PatientModel.AsignarPrioridad(PersonModel.CalcularEdad(Convert.ToDateTime(line[2])), line[8])),
-                                    Prioridad = PatientModel.AsignarPrioridad(PersonModel.CalcularEdad(Convert.ToDateTime(line[2])), line[8]),
-                                    Hospital = PatientModel.AsignarHospital(line[4]),
-                                    FechaDeIngreso = Convert.ToDateTime(line[9])
+                                    Descripcion= line[7],
+                                    Estatus= line[8].ToUpper(),
+                                    Categoria= currentCategory,
+                                    Prioridad= currentPriority,
+                                    Hospital= currentHospital,
+                                    FechaDeIngreso= Convert.ToDateTime(line[9]),
                                 };
-                                patientList.AddLast(currentPatient);
+                                PersonModel.Tree_Add(currentPerson);
+                                PersonModel.CustomTree_Add(currentPerson);
+                                PatientModel.Tree_Add(currentPatient);
+                               /// PatientModel.Heap_Add(currentPatient);
                             }
                         }
                     }                  
                 }
 
-                ///<!--AGREGAR INGRESO A HEAPS-->
-                ///Storage.Instance.Heap_GU_C.Add(patientList.Where(x => x.Hospital == "Guatemala").Where(x => x.Estatus == "CONFIRMADO"));
-                ///Storage.Instance.Heap_GU_S.Add(patientList.Where(x => x.Hospital == "Guatemala").Where(x => x.Estatus == "SOSPECHOSO"));
-                ///
-                //////Storage.Instance.Heap_ES_C.Add(patientList.Where(x => x.Hospital == "Guatemala").Where(x => x.Estatus == "CONFIRMADO"));
-                ///Storage.Instance.Heap_ES_S.Add(patientList.Where(x => x.Hospital == "Guatemala").Where(x => x.Estatus == "SOSPECHOSO"));
-                ///
-                //////Storage.Instance.Heap_QZ_C.Add(patientList.Where(x => x.Hospital == "Guatemala").Where(x => x.Estatus == "CONFIRMADO"));
-                ///Storage.Instance.Heap_QZ_S.Add(patientList.Where(x => x.Hospital == "Guatemala").Where(x => x.Estatus == "SOSPECHOSO"));
-                ///
-                //////Storage.Instance.Heap_CQ_C.Add(patientList.Where(x => x.Hospital == "Guatemala").Where(x => x.Estatus == "CONFIRMADO"));
-                ///Storage.Instance.Heap_CQ_S.Add(patientList.Where(x => x.Hospital == "Guatemala").Where(x => x.Estatus == "SOSPECHOSO"));
-                ///
-                //////Storage.Instance.Heap_PE_C.Add(patientList.Where(x => x.Hospital == "Guatemala").Where(x => x.Estatus == "CONFIRMADO"));
-                ///Storage.Instance.Heap_PE_S.Add(patientList.Where(x => x.Hospital == "Guatemala").Where(x => x.Estatus == "SOSPECHOSO"));
+                PersonModel person1 = new PersonModel { Nombre = "Jose", Apellido="De Leon", CUI="2996768110101", Departamento="Guatemala", Edad="19 años", FechaDeNacimiento=Convert.ToDateTime("09/09/2000"), Municipio="Guatemala"};
+                PersonModel person2 = new PersonModel { Nombre = "Vinicio" };
+                PersonModel person3 = new PersonModel { Nombre = "De Leon" };
+                PersonModel person4 = new PersonModel { Nombre = "Jimenez" };
+                PersonModel person5 = new PersonModel { Nombre = "Javier" };
+
+                PersonModel.HashTable_Add("GU", person1);
+                PersonModel.HashTable_Add("GU", person2);
+                PersonModel.HashTable_Add("GU", person3);
+                PersonModel.HashTable_Add("GU", person4);
+                PersonModel.HashTable_Add("GU", person5);
+
+                int firstIndicator = PersonModel.HashTable_CountEmptys("GU");
+                string positions1 = PersonModel.HashTable_Positions("GU");
+
+                PersonModel personResult = PersonModel.HashTable_Find("GU-3");
 
 
+                int SecondIndicator = PersonModel.HashTable_CountEmptys("GU");
+                string positions2 = PersonModel.HashTable_Positions("GU");
+
+                List<PersonModel> listTest = Storage.Instance.HospitalHashTable["GU"].ToList();
 
                 return View();
             }

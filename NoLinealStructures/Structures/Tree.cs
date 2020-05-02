@@ -30,7 +30,7 @@ namespace NoLinealStructures.Structures
             {
                 nodeF.Left = InsertAVL(nodeF.Left, value);
             }
-            else
+            if ((int)Comparer.DynamicInvoke(nodeF.Value, value) == -1)
             {
                 nodeF.Right = InsertAVL(nodeF.Right, value);
             }
@@ -271,6 +271,48 @@ namespace NoLinealStructures.Structures
             if (node.Right != null)
             {
                 PreOrden(node.Right, currentList);
+            }
+        }
+
+        public List<T> Filter(bool position)
+        {
+            List<T> currentList = new List<T>();
+            try
+            {
+                if (Root.Value != null)
+                {
+                    currentList.Add(Root.Value);
+                    if(position)
+                    {
+                        InOrdenFilter(Root.Right, currentList);
+                    }
+                    else
+                    {
+                        InOrdenFilter(Root.Left, currentList);
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+                return currentList;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private void InOrdenFilter(Node<T> node, List<T> currentList)
+        {
+            if (node.Left != null)
+            {
+                InOrdenFilter(node.Left, currentList);
+            }
+            currentList.Add(node.Value);
+            if (node.Right != null)
+            {
+                InOrdenFilter(node.Right, currentList);
             }
         }
 

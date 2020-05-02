@@ -1,0 +1,95 @@
+﻿@model IEnumerable<COVID_19.Models.PersonModel>
+
+@{
+    ViewBag.Title = "Guatemala";
+}
+
+<ul class="breadcrumb">
+    <li>@Html.ActionLink("Inicio", "Index", "Home")</li>
+    <li>@Html.ActionLink("Simulación", "Simulation", "Hospital")</li>
+    <li class="active">Hospital Guatemala</li>
+</ul>
+
+<h2>GUATEMALA</h2>
+<hr />
+
+
+<h4>Departamentos Asignados</h4>
+<p>
+    <ul>
+        <li>Guatemala</li>
+        <li>El Progreso</li>
+        <li>Baja Verapaz</li>
+        <li>Sacatepéquez</li>
+        <li>Chimaltenango</li>
+    </ul>
+</p>
+
+<h4>Camas Disponibles <br /> @ViewBag.CamasDisponibles</h4>
+
+@using (Html.BeginForm())
+{
+    <button type="submit" class="btn btn-primary">Llenar Disponible</button>
+}
+
+<br />
+<br />
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Apellido)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaDeNacimiento)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CUI)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Departamento)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Municipio)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Edad)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Apellido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaDeNacimiento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CUI)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Departamento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Municipio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Edad)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+    }
+
+</table>

@@ -15,6 +15,6 @@ namespace NoLinealStructures.Interfaces
         List<T> ToPreOrden();
         List<T> ToInOrden();
         List<T> ToPostOrden();
-
+        List<T> Filter(bool position);
     }
 }

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.ComponentModel.DataAnnotations;
+using COVID_19.Helpers;
 
 namespace COVID_19.Models
 {
@@ -15,6 +17,9 @@ namespace COVID_19.Models
         public string Categoria { get; set; }
         public int Prioridad { get; set; }
         public string Hospital { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/mm/yyy}", ApplyFormatInEditMode = true)]
         public DateTime FechaDeIngreso { get; set; }
 
         /// <summary>
@@ -60,6 +65,10 @@ namespace COVID_19.Models
         /// <returns>El número de prioridad</returns>
         public static int AsignarPrioridad(string Edad, string Estatus)
         {
+            if (Estatus.ToUpper() == "RECUPERADO")
+            {
+                return 0;
+            }
             if (Edad.Contains("año") || Edad.Contains("años"))
             {
                 int edad = 0;
@@ -112,11 +121,11 @@ namespace COVID_19.Models
                     return 2;
                 }
             }
-            return 0;
+            return -1;
         }
 
         /// <summary>
-        /// Describe la definicón de la prioridad en texto
+        /// Describe la definición de la prioridad en texto
         /// </summary>
         /// <param name="Prioridad"></param>
         /// <returns>La descripción de la prioridad</returns>
@@ -124,6 +133,7 @@ namespace COVID_19.Models
         {
             switch (Prioridad)
             {
+                case (0): return "Paciente recuperado";
                 case (1): return "Paciente confirmado de la 3era edad";
                 case (2): return "Paciente confirmado recién nacido";
                 case (3): return "Paciente confirmado adulto";
@@ -138,7 +148,7 @@ namespace COVID_19.Models
 
         public static string AsignarHospital(string Departamento)
         {
-            string DepartamentoNormalizado = RemoverAcentos(Departamento).ToUpper();
+            string DepartamentoNormalizado = RemoverAcentos(Departamento.ToLower()).ToUpper();
             switch (DepartamentoNormalizado)
             {
                 case ("PETEN"): return "Petén";
@@ -172,24 +182,91 @@ namespace COVID_19.Models
             }
         }
 
-        /// <summary>
-        /// Sustituye las vocales con acentos contenidas en el texto
-        /// </summary>
-        /// <param name="inputString"></param>
-        /// <returns>La palabra sin acentos</returns>
-        public static string RemoverAcentos(string Departamento)
+        public static string DescripcionSintomas(string indicador1, string indicador2, string indicador3, string indicador4, string indicador5)
         {
-            Regex Acentos_a = new Regex("[á|à|ä|â]", RegexOptions.Compiled);
-            Regex Acentos_e = new Regex("[é|è|ë|ê]", RegexOptions.Compiled);
-            Regex Acentos_i = new Regex("[í|ì|ï|î]", RegexOptions.Compiled);
-            Regex Acentos_o = new Regex("[ó|ò|ö|ô]", RegexOptions.Compiled);
-            Regex Acentos_u = new Regex("[ú|ù|ü|û]", RegexOptions.Compiled);
-            Departamento = Acentos_a.Replace(Departamento, "a");
-            Departamento = Acentos_e.Replace(Departamento, "e");
-            Departamento = Acentos_i.Replace(Departamento, "i");
-            Departamento = Acentos_o.Replace(Departamento, "o");
-            Departamento = Acentos_u.Replace(Departamento, "u");
-            return Departamento;
+            string sintomas = "";
+            if (indicador1 == "on") sintomas += "Fiebre,";
+            if (indicador2 == "on") sintomas += " Tos seca,";
+            if (indicador3 == "on") sintomas += " Cansancio,";
+            if (indicador4 == "on") sintomas += " Dificultad respiratoria,";
+            if (indicador5 == "on") sintomas += " Escalofríos y dolores corporales";
+            return sintomas;
+        }
+
+        //INSERT TREE
+        public static void Tree_Add(PatientModel patient)
+        {
+            Storage.Instance.PatientTree.Comparer = CUIComparison;
+            Storage.Instance.PatientTree.Root = Storage.Instance.PatientTree.InsertAVL(Storage.Instance.PatientTree.Root, patient);
+        }
+
+        //SEARCH TREE               
+        public static PatientModel Tree_Search(PatientModel key)
+        {
+            Storage.Instance.PatientTree.Comparer = CUIComparison;
+            return Storage.Instance.PatientTree.Find(key);
+        }
+
+        //INSERT HEAP
+        public static void Heap_Add(PatientModel patient)
+        {
+            if (patient.Estatus == "SOSPECHOSO")
+            {
+                if (patient.Hospital == "Guatemala")
+                {
+                    //guardar heap de sospechosos de guate
+                    return;
+                }
+                if (patient.Hospital == "Escuintla")
+                {
+                    //guardar heap de sospechosos de escuintla
+                    return;
+                }
+                if (patient.Hospital == "Petén")
+                {
+                    //guardar heap de sospechosos de peten
+                    return;
+                }
+                if (patient.Hospital == "Quetzaltenango")
+                {
+                    //guardar heap de sospechosos de quetzaltenango
+                    return;
+                }
+                if (patient.Hospital == "Chiquimula")
+                {
+                    //guardar heap de sospechosos de chiquimula
+                    return;
+                }
+            }
+            if(patient.Estatus == "CONFIRMADO")
+            {
+                if (patient.Hospital == "Guatemala")
+                {
+                    //guardar heap de confirmados de guate
+                    return;
+                }
+                if (patient.Hospital == "Escuintla")
+                {
+                    //guardar heap de confirmados de escuintla
+                    return;
+                }
+                if (patient.Hospital == "Petén")
+                {
+                    //guardar heap de confirmados de peten
+                    return;
+                }
+                if (patient.Hospital == "Quetzaltenango")
+                {
+                    //guardar heap de confirmados de quetzaltenango
+                    return;
+                }
+                if (patient.Hospital == "Chiquimula")
+                {
+                    //guardar heap de confirmados de chiquimula
+                    return;
+                }
+            }
+
         }
 
     }

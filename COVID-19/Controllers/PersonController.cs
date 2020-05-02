@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using COVID_19.Helpers;
+using COVID_19.Models;
+using System.Diagnostics;
 
 namespace COVID_19.Controllers
 {
@@ -84,6 +87,54 @@ namespace COVID_19.Controllers
             {
                 return View();
             }
+        }
+
+        public ActionResult Search()
+        {
+            Storage.Instance.ResultList.Clear();
+            return View(Storage.Instance.ResultList);
+        }
+
+        [HttpPost]
+        public ActionResult Search(FormCollection collection)
+        {
+            try
+            {
+                Storage.Instance.ResultList.Clear();
+
+                string Nombre = collection["Nombre"];
+                string Apellido = collection["Apellido"];
+                string CUI = collection["CUI"];
+
+                if (Nombre == "" && Apellido == "" && CUI == "")
+                {
+                    return View("Error");
+                }
+
+                if (CUI != "")
+                {
+                    PersonModel personToSearch = new PersonModel { CUI = CUI };
+                    Storage.Instance.ResultList.Add(PersonModel.Tree_Search(personToSearch));
+                    return View(Storage.Instance.ResultList);
+                }
+                else
+                {
+                    Storage.Instance.ResultList = PersonModel.CustomTree_Filter(Nombre);
+                    return View(Storage.Instance.ResultList);
+                }
+            }
+            catch
+            {
+                return View("Error");
+            }
+        }
+
+        public new ActionResult Profile(string id)
+        {
+
+            PatientModel patient = new PatientModel { CUI = id };
+            patient = PatientModel.Tree_Search(patient);
+            return View(patient);
         }
 
     }
