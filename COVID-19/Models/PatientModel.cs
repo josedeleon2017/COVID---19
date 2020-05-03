@@ -231,26 +231,45 @@ namespace COVID_19.Models
             {
                 if (patient.Hospital == "Guatemala")
                 {
-                    //guardar heap de sospechosos de guate
+                    Storage.Instance.Heap_GU_S.GetPriorityValue = GetPriorityValue;
+                    Storage.Instance.Heap_GU_S.Comparer = PatientHeapComparison;
+                    Storage.Instance.Heap_GU_S.DateComparison = PatientDateComparison;
+                    Storage.Instance.Heap_GU_S.Add(patient);
                     return;
                 }
                 if (patient.Hospital == "Escuintla")
                 {
+                    Storage.Instance.Heap_ES_S.GetPriorityValue = GetPriorityValue;
+                    Storage.Instance.Heap_ES_S.Comparer = PatientHeapComparison;
+                    Storage.Instance.Heap_ES_S.DateComparison = PatientDateComparison;
+                    Storage.Instance.Heap_ES_S.Add(patient);
                     //guardar heap de sospechosos de escuintla
                     return;
                 }
                 if (patient.Hospital == "Petén")
                 {
+                    Storage.Instance.Heap_PE_S.GetPriorityValue = GetPriorityValue;
+                    Storage.Instance.Heap_PE_S.Comparer = PatientHeapComparison;
+                    Storage.Instance.Heap_PE_S.DateComparison = PatientDateComparison;
+                    Storage.Instance.Heap_PE_S.Add(patient);
                     //guardar heap de sospechosos de peten
                     return;
                 }
                 if (patient.Hospital == "Quetzaltenango")
                 {
+                    Storage.Instance.Heap_QZ_S.GetPriorityValue = GetPriorityValue;
+                    Storage.Instance.Heap_QZ_S.Comparer = PatientHeapComparison;
+                    Storage.Instance.Heap_QZ_S.DateComparison = PatientDateComparison;
+                    Storage.Instance.Heap_QZ_S.Add(patient);
                     //guardar heap de sospechosos de quetzaltenango
                     return;
                 }
                 if (patient.Hospital == "Chiquimula")
                 {
+                    Storage.Instance.Heap_CQ_S.GetPriorityValue = GetPriorityValue;
+                    Storage.Instance.Heap_CQ_S.Comparer = PatientHeapComparison;
+                    Storage.Instance.Heap_CQ_S.DateComparison = PatientDateComparison;
+                    Storage.Instance.Heap_CQ_S.Add(patient);
                     //guardar heap de sospechosos de chiquimula
                     return;
                 }
@@ -259,32 +278,67 @@ namespace COVID_19.Models
             {
                 if (patient.Hospital == "Guatemala")
                 {
+                    Storage.Instance.Heap_GU_C.GetPriorityValue = GetPriorityValue;
+                    Storage.Instance.Heap_GU_C.Comparer = PatientHeapComparison;
+                    Storage.Instance.Heap_GU_C.DateComparison = PatientDateComparison;
+                    Storage.Instance.Heap_GU_C.Add(patient);
                     //guardar heap de confirmados de guate
                     return;
                 }
                 if (patient.Hospital == "Escuintla")
                 {
+                    Storage.Instance.Heap_ES_C.GetPriorityValue = GetPriorityValue;
+                    Storage.Instance.Heap_ES_C.Comparer = PatientHeapComparison;
+                    Storage.Instance.Heap_ES_C.DateComparison = PatientDateComparison;
+                    Storage.Instance.Heap_ES_C.Add(patient);
                     //guardar heap de confirmados de escuintla
                     return;
                 }
                 if (patient.Hospital == "Petén")
                 {
+                    Storage.Instance.Heap_PE_C.GetPriorityValue = GetPriorityValue;
+                    Storage.Instance.Heap_PE_C.Comparer = PatientHeapComparison;
+                    Storage.Instance.Heap_PE_C.DateComparison = PatientDateComparison;
+                    Storage.Instance.Heap_PE_C.Add(patient);
                     //guardar heap de confirmados de peten
                     return;
                 }
                 if (patient.Hospital == "Quetzaltenango")
                 {
+                    Storage.Instance.Heap_QZ_C.GetPriorityValue = GetPriorityValue;
+                    Storage.Instance.Heap_QZ_C.Comparer = PatientHeapComparison;
+                    Storage.Instance.Heap_QZ_C.DateComparison = PatientDateComparison;
+                    Storage.Instance.Heap_QZ_C.Add(patient);
                     //guardar heap de confirmados de quetzaltenango
                     return;
                 }
                 if (patient.Hospital == "Chiquimula")
                 {
+                    Storage.Instance.Heap_CQ_C.GetPriorityValue = GetPriorityValue;
+                    Storage.Instance.Heap_CQ_C.Comparer = PatientHeapComparison;
+                    Storage.Instance.Heap_CQ_C.DateComparison = PatientDateComparison;
+                    Storage.Instance.Heap_CQ_C.Add(patient);
                     //guardar heap de confirmados de chiquimula
                     return;
                 }
             }
 
         }
+
+        public static Func<PatientModel, int> GetPriorityValue = delegate (PatientModel Patient)
+        {
+            return Patient.Prioridad;
+        };
+
+        public static Comparison<PatientModel> PatientHeapComparison = delegate (PatientModel Patient1, PatientModel Patient2)
+        {
+            return Patient1.CUI.CompareTo(Patient2.CUI);
+        };
+
+        public static Comparison<PatientModel> PatientDateComparison = delegate (PatientModel Patient1, PatientModel Patient2)
+        {
+            return Patient1.FechaDeIngreso.CompareTo(Patient2.FechaDeIngreso);
+        };
 
     }
 }

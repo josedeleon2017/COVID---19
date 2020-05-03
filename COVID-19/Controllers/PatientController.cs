@@ -204,7 +204,7 @@ namespace COVID_19.Controllers
                 PersonModel.Tree_Add(currentPerson);
                 PersonModel.CustomTree_Add(currentPerson);
                 PatientModel.Tree_Add(currentPatient);
-                ///PatientModel.Heap_Add(currentPatient);
+                PatientModel.Heap_Add(currentPatient);
 
                 return View();
             }

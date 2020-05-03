@@ -79,12 +79,12 @@ namespace COVID_19.Controllers
                                 PersonModel.Tree_Add(currentPerson);
                                 PersonModel.CustomTree_Add(currentPerson);
                                 PatientModel.Tree_Add(currentPatient);
-                               /// PatientModel.Heap_Add(currentPatient);
+                                PatientModel.Heap_Add(currentPatient);
                             }
                         }
                     }                  
                 }
-
+                /*
                 PatientModel person1 = new PatientModel { CUI="51" };
                 PatientModel person2 = new PatientModel { CUI = "91" };
                 PatientModel person3 = new PatientModel { CUI = "7" };
@@ -104,7 +104,7 @@ namespace COVID_19.Controllers
                 Storage.Instance.PatientHashTable.Add("GU", patient5);
 
                 int firstIndicator = Storage.Instance.PatientHashTable.CountEmptys("GU");
-
+                */
 
                 return View();
             }

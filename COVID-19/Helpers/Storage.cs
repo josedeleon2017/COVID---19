@@ -53,5 +53,55 @@ namespace COVID_19.Helpers
         /// </summary>
         public NoLinealStructures.Structures.CustomDictionary<PatientModel> PatientHashTable = new NoLinealStructures.Structures.CustomDictionary<PatientModel>();
 
+        /// <summary>
+        /// Heap donde se guardan los pacientes confirmados asignados al hospital del departamento de Guatemala.
+        /// </summary>
+        public NoLinealStructures.Structures.Heap<PatientModel> Heap_GU_C = new NoLinealStructures.Structures.Heap<PatientModel>();
+
+        /// <summary>
+        /// Heap donde se guardan los pacientes sospechosos asignados al hospital del departamento de Guatemala.
+        /// </summary>
+        public NoLinealStructures.Structures.Heap<PatientModel> Heap_GU_S = new NoLinealStructures.Structures.Heap<PatientModel>();
+
+        /// <summary>
+        /// Heap donde se guardan los pacientes confirmados asignados al hospital del departamento de Escuintla.
+        /// </summary>
+        public NoLinealStructures.Structures.Heap<PatientModel> Heap_ES_C = new NoLinealStructures.Structures.Heap<PatientModel>();
+
+        /// <summary>
+        /// Heap donde se guardan los pacientes sospechosos asignados al hospital del departamento de Escuintla.
+        /// </summary>
+        public NoLinealStructures.Structures.Heap<PatientModel> Heap_ES_S = new NoLinealStructures.Structures.Heap<PatientModel>();
+
+        /// <summary>
+        /// Heap donde se guardan los pacientes confirmados asignados al hospital del departamento de Quetzaltenango.
+        /// </summary>
+        public NoLinealStructures.Structures.Heap<PatientModel> Heap_QZ_C = new NoLinealStructures.Structures.Heap<PatientModel>();
+
+        /// <summary>
+        /// Heap donde se guardan los pacientes sospechosos asignados al hospital del departamento de Quetzaltenango.
+        /// </summary>
+        public NoLinealStructures.Structures.Heap<PatientModel> Heap_QZ_S = new NoLinealStructures.Structures.Heap<PatientModel>();
+
+        /// <summary>
+        /// Heap donde se guardan los pacientes confirmados asignados al hospital del departamento de Chiquimula.
+        /// </summary>
+        public NoLinealStructures.Structures.Heap<PatientModel> Heap_CQ_C = new NoLinealStructures.Structures.Heap<PatientModel>();
+
+        /// <summary>
+        /// Heap donde se guardan los pacientes sospechosos asignados al hospital del departamento de Chiquimula.
+        /// </summary>
+        public NoLinealStructures.Structures.Heap<PatientModel> Heap_CQ_S = new NoLinealStructures.Structures.Heap<PatientModel>();
+
+        /// <summary>
+        /// Heap donde se guardan los pacientes confirmados asignados al hospital del departamento de Petén.
+        /// </summary>
+        public NoLinealStructures.Structures.Heap<PatientModel> Heap_PE_C = new NoLinealStructures.Structures.Heap<PatientModel>();
+
+        /// <summary>
+        /// Heap donde se guardan los pacientes sospechosos asignados al hospital del departamento de Petén.
+        /// </summary>
+        public NoLinealStructures.Structures.Heap<PatientModel> Heap_PE_S = new NoLinealStructures.Structures.Heap<PatientModel>();
+
     }
 }
