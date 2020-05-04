@@ -30,7 +30,7 @@ namespace NoLinealStructures.Structures
                 {
                     Root.Left = node;
                     Count++;
-                    if ((int)GetPriorityValue.DynamicInvoke(node.Value) > (int)GetPriorityValue.DynamicInvoke(Root.Value))
+                    if ((int)GetPriorityValue.DynamicInvoke(node.Value) < (int)GetPriorityValue.DynamicInvoke(Root.Value))
                     {
                         SwapNodeValue(Root, node);
                     }
@@ -43,7 +43,7 @@ namespace NoLinealStructures.Structures
                 {
                     Root.Right = node;
                     Count++;
-                    if ((int)GetPriorityValue.DynamicInvoke(node.Value) > (int)GetPriorityValue.DynamicInvoke(Root.Value))
+                    if ((int)GetPriorityValue.DynamicInvoke(node.Value) < (int)GetPriorityValue.DynamicInvoke(Root.Value))
                     {
 
                         SwapNodeValue(Root, node);
@@ -76,7 +76,7 @@ namespace NoLinealStructures.Structures
                         Node<T> Next = Parent.Left;
                         while (Parent != null)
                         {
-                            if ((int)GetPriorityValue.DynamicInvoke(Next.Value) > (int)GetPriorityValue.DynamicInvoke(Parent.Value))
+                            if ((int)GetPriorityValue.DynamicInvoke(Next.Value) < (int)GetPriorityValue.DynamicInvoke(Parent.Value))
                             {
                                 SwapNodeValue(Parent, Next);
                                 Next = Parent;
@@ -102,7 +102,7 @@ namespace NoLinealStructures.Structures
                         Node<T> Next = Parent.Right;
                         while (Parent != null)
                         {
-                            if ((int)GetPriorityValue.DynamicInvoke(Next.Value) > (int)GetPriorityValue.DynamicInvoke(Parent.Value))
+                            if ((int)GetPriorityValue.DynamicInvoke(Next.Value) < (int)GetPriorityValue.DynamicInvoke(Parent.Value))
                             {
                                 SwapNodeValue(Parent, Next);
                             }
@@ -168,7 +168,7 @@ namespace NoLinealStructures.Structures
             {
                 if (Temp.Right == null)
                 {
-                    if ((int)GetPriorityValue.DynamicInvoke(Temp.Value) < (int)GetPriorityValue.DynamicInvoke(Temp.Left.Value))
+                    if ((int)GetPriorityValue.DynamicInvoke(Temp.Value) > (int)GetPriorityValue.DynamicInvoke(Temp.Left.Value))
                     {
                         SwapNodeValue(Temp, Temp.Left);
                     }
@@ -184,9 +184,9 @@ namespace NoLinealStructures.Structures
                 }
                 else
                 {
-                    if ((int)GetPriorityValue.DynamicInvoke(Temp.Left.Value) > (int)GetPriorityValue.DynamicInvoke(Temp.Right.Value))
+                    if ((int)GetPriorityValue.DynamicInvoke(Temp.Left.Value) < (int)GetPriorityValue.DynamicInvoke(Temp.Right.Value))
                     {
-                        if ((int)GetPriorityValue.DynamicInvoke(Temp.Value) < (int)GetPriorityValue.DynamicInvoke(Temp.Left.Value))
+                        if ((int)GetPriorityValue.DynamicInvoke(Temp.Value) > (int)GetPriorityValue.DynamicInvoke(Temp.Left.Value))
                         {
                             SwapNodeValue(Temp, Temp.Left);
                             Temp = Temp.Left;
@@ -207,7 +207,7 @@ namespace NoLinealStructures.Structures
                     {
                         if ((int)DateComparison.DynamicInvoke(Temp.Left.Value, Temp.Right.Value) == -1 || (int)DateComparison.DynamicInvoke(Temp.Left.Value, Temp.Right.Value) == 0)
                         {
-                            if ((int)GetPriorityValue.DynamicInvoke(Temp.Value) < (int)GetPriorityValue.DynamicInvoke(Temp.Left.Value))
+                            if ((int)GetPriorityValue.DynamicInvoke(Temp.Value) > (int)GetPriorityValue.DynamicInvoke(Temp.Left.Value))
                             {
                                 SwapNodeValue(Temp, Temp.Left);
                                 Temp = Temp.Left;
@@ -225,7 +225,7 @@ namespace NoLinealStructures.Structures
                         }
                         else if ((int)DateComparison.DynamicInvoke(Temp.Left.Value, Temp.Right.Value) == 1)
                         {
-                            if ((int)GetPriorityValue.DynamicInvoke(Temp.Value) < (int)GetPriorityValue.DynamicInvoke(Temp.Right.Value))
+                            if ((int)GetPriorityValue.DynamicInvoke(Temp.Value) > (int)GetPriorityValue.DynamicInvoke(Temp.Right.Value))
                             {
                                 SwapNodeValue(Temp, Temp.Right);
                                 Temp = Temp.Right;
@@ -245,9 +245,9 @@ namespace NoLinealStructures.Structures
 
                     }
                     //
-                    else if ((int)GetPriorityValue.DynamicInvoke(Temp.Right.Value) > (int)GetPriorityValue.DynamicInvoke(Temp.Left.Value))
+                    else if ((int)GetPriorityValue.DynamicInvoke(Temp.Right.Value) < (int)GetPriorityValue.DynamicInvoke(Temp.Left.Value))
                     {
-                        if ((int)GetPriorityValue.DynamicInvoke(Temp.Value) < (int)GetPriorityValue.DynamicInvoke(Temp.Right.Value))
+                        if ((int)GetPriorityValue.DynamicInvoke(Temp.Value) > (int)GetPriorityValue.DynamicInvoke(Temp.Right.Value))
                         {
                             SwapNodeValue(Temp, Temp.Right);
                             Temp = Temp.Right;
