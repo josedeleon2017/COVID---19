@@ -105,6 +105,7 @@ namespace COVID_19.Controllers
 
                 int firstIndicator = Storage.Instance.PatientHashTable.CountEmptys("GU");
                 */
+                int indicator = Storage.Instance.PatientTree.ToInOrden().Where(x => x.Hospital == "Quetzaltenango").Where(x => x.Estatus == "CONFIRMADO").Count();
 
                 return View();
             }

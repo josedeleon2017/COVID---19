@@ -39,6 +39,9 @@
             Prioridad
         </th>
         <th>
+            Fecha de ingreso
+        </th>
+        <th>
             Categoria
         </th>
         <th>
@@ -63,6 +66,9 @@
                 @Html.DisplayFor(modelItem => item.Prioridad)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.FechaDeIngreso)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Categoria)
             </td>
             <td>
@@ -70,7 +76,7 @@
             </td>
 
             <td>
-                @Html.ActionLink("Eliminar", "Remove_Quetzaltenango", new { id = item.CUI })
+                @Html.ActionLink("Eliminar", "Remove_Peten", new { id = item.CUI })
             </td>
         </tr>
     }

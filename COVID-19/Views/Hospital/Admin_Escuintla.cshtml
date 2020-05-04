@@ -39,6 +39,9 @@
             Prioridad
         </th>
         <th>
+            Fecha de ingreso
+        </th>
+        <th>
             Categoria
         </th>
         <th>
@@ -49,30 +52,33 @@
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Apellido)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CUI)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Prioridad)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Categoria)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Estatus)
-            </td>
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Nombre)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Apellido)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.CUI)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Prioridad)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.FechaDeIngreso)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Categoria)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Estatus)
+    </td>
 
-            <td>
-                @Html.ActionLink("Eliminar", "Remove_Escuintla", new { id = item.CUI })
-            </td>
-        </tr>
+    <td>
+        @Html.ActionLink("Eliminar", "Remove_Escuintla", new { id = item.CUI })
+    </td>
+</tr>
     }
 
 </table>

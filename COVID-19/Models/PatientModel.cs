@@ -17,9 +17,6 @@ namespace COVID_19.Models
         public string Categoria { get; set; }
         public int Prioridad { get; set; }
         public string Hospital { get; set; }
-
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd/mm/yyy}", ApplyFormatInEditMode = true)]
         public DateTime FechaDeIngreso { get; set; }
 
         /// <summary>

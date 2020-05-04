@@ -95,6 +95,12 @@ namespace COVID_19.Controllers
             int Recuperados = Storage.Instance.PatientTree.ToInOrden().Where(x => x.Estatus == "RECUPERADO").ToList().Count();
             double Porcentaje = Convert.ToDouble(Confirmados) / (Convert.ToDouble(Confirmados) + Convert.ToDouble(Recuperados)) * 100;
 
+            Storage.Instance.PatientHashTable.Add("GU", null);
+            Storage.Instance.PatientHashTable.Add("ES", null);
+            Storage.Instance.PatientHashTable.Add("QZ", null);
+            Storage.Instance.PatientHashTable.Add("CQ", null);
+            Storage.Instance.PatientHashTable.Add("PE", null);
+
             ViewBag.Sospechosos = Sospechosos;
             ViewBag.Confirmados = Confirmados;
             ViewBag.Porcentaje = Convert.ToString(Math.Round(Porcentaje, 2)) + "%";
@@ -132,7 +138,7 @@ namespace COVID_19.Controllers
                 }
                 else
                 {
-                    ViewBag.Result = "[ HASH INVALIDO ]";
+                    ViewBag.Result = "[ NO SE ECONTRO EL HASH ]";
                     return View();
                 }           
             }
@@ -144,7 +150,11 @@ namespace COVID_19.Controllers
 
         public ActionResult Admin_Guatemala()
         {
-            ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("GU"); 
+            ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("GU");
+            if (Storage.Instance.PatientHashTable.isFull("GU"))
+            {
+                ViewBag.CamasDisponibles = "[ -- ]";
+            }
             return View(Storage.Instance.PatientHashTable.ToList("GU"));
         }
 
@@ -154,17 +164,30 @@ namespace COVID_19.Controllers
             try
             {
                 //AGREGAR INSERCION DEL HEAP
+                if (Storage.Instance.Heap_GU_C.Count == 0)
+                {
+                    ViewBag.Result = "Cola de confirmados vacia";
+                    ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("GU");
+                    return View(Storage.Instance.PatientHashTable.ToList("GU"));
+                }
                 if (!Storage.Instance.PatientHashTable.isFull("GU"))
                 {
+                    PatientModel patient = Storage.Instance.Heap_GU_C.RemoveRoot();
+                    PatientModel.HashTable_Add("GU", patient);
                     ViewBag.Result = "Paciente ingresado exitosamente";
-                    // PatientModel patient = Storage.Instance.Heap.RemoveRoot();
-                    //PatientModel.HashTable_Add("GU", patient);
+                    ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("GU");
+                    if (Storage.Instance.PatientHashTable.isFull("GU"))
+                    {
+                        ViewBag.CamasDisponibles = "[ -- ]";
+                    }
+                    return View(Storage.Instance.PatientHashTable.ToList("GU"));
                 }
                 else
                 {
                     ViewBag.Result = "Camas llenas, el paciente permance en la cola";
+                    ViewBag.CamasDisponibles = "[ -- ]";
+                    return View(Storage.Instance.PatientHashTable.ToList("GU"));
                 }
-                return View();
             }
             catch
             {
@@ -182,6 +205,10 @@ namespace COVID_19.Controllers
         public ActionResult Admin_Escuintla()
         {
             ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("ES");
+            if (Storage.Instance.PatientHashTable.isFull("ES"))
+            {
+                ViewBag.CamasDisponibles = "[ -- ]";
+            }
             return View(Storage.Instance.PatientHashTable.ToList("ES"));
         }
 
@@ -191,7 +218,30 @@ namespace COVID_19.Controllers
             try
             {
                 //AGREGAR INSERCION DEL HEAP
-                return View();
+                if (Storage.Instance.Heap_ES_C.Count == 0)
+                {
+                    ViewBag.Result = "Cola de confirmados vacia";
+                    ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("ES");
+                    return View(Storage.Instance.PatientHashTable.ToList("ES"));
+                }
+                if (!Storage.Instance.PatientHashTable.isFull("ES"))
+                {
+                    PatientModel patient = Storage.Instance.Heap_ES_C.RemoveRoot();
+                    PatientModel.HashTable_Add("ES", patient);
+                    ViewBag.Result = "Paciente ingresado exitosamente";
+                    ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("ES");
+                    if (Storage.Instance.PatientHashTable.isFull("ES"))
+                    {
+                        ViewBag.CamasDisponibles = "[ -- ]";
+                    }
+                    return View(Storage.Instance.PatientHashTable.ToList("ES"));
+                }
+                else
+                {
+                    ViewBag.Result = "Camas llenas, el paciente permance en la cola";
+                    ViewBag.CamasDisponibles = "[ -- ]";
+                    return View(Storage.Instance.PatientHashTable.ToList("ES"));
+                }
             }
             catch
             {
@@ -208,6 +258,10 @@ namespace COVID_19.Controllers
         public ActionResult Admin_Quetzaltenango()
         {
             ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("QZ");
+            if (Storage.Instance.PatientHashTable.isFull("QZ"))
+            {
+                ViewBag.CamasDisponibles = "[ -- ]";
+            }
             return View(Storage.Instance.PatientHashTable.ToList("QZ"));
         }
 
@@ -217,7 +271,30 @@ namespace COVID_19.Controllers
             try
             {
                 //AGREGAR INSERCION DEL HEAP
-                return View();
+                if (Storage.Instance.Heap_QZ_C.Count == 0)
+                {
+                    ViewBag.Result = "Cola de confirmados vacia";
+                    ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("QZ");
+                    return View(Storage.Instance.PatientHashTable.ToList("QZ"));
+                }
+                if (!Storage.Instance.PatientHashTable.isFull("QZ"))
+                {
+                    PatientModel patient = Storage.Instance.Heap_QZ_C.RemoveRoot();
+                    PatientModel.HashTable_Add("QZ", patient);
+                    ViewBag.Result = "Paciente ingresado exitosamente";
+                    ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("QZ");
+                    if (Storage.Instance.PatientHashTable.isFull("QZ"))
+                    {
+                        ViewBag.CamasDisponibles = "[ -- ]";
+                    }
+                    return View(Storage.Instance.PatientHashTable.ToList("QZ"));
+                }
+                else
+                {
+                    ViewBag.Result = "Camas llenas, el paciente permance en la cola";
+                    ViewBag.CamasDisponibles = "[ -- ]";
+                    return View(Storage.Instance.PatientHashTable.ToList("QZ"));
+                }
             }
             catch
             {
@@ -234,6 +311,10 @@ namespace COVID_19.Controllers
         public ActionResult Admin_Chiquimula()
         {
             ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("CQ");
+            if (Storage.Instance.PatientHashTable.isFull("CQ"))
+            {
+                ViewBag.CamasDisponibles = "[ -- ]";
+            }
             return View(Storage.Instance.PatientHashTable.ToList("CQ"));
         }
 
@@ -243,7 +324,30 @@ namespace COVID_19.Controllers
             try
             {
                 //AGREGAR INSERCION DEL HEAP
-                return View();
+                if (Storage.Instance.Heap_CQ_C.Count == 0)
+                {
+                    ViewBag.Result = "Cola de confirmados vacia";
+                    ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("CQ");
+                    return View(Storage.Instance.PatientHashTable.ToList("CQ"));
+                }
+                if (!Storage.Instance.PatientHashTable.isFull("CQ"))
+                {
+                    PatientModel patient = Storage.Instance.Heap_CQ_C.RemoveRoot();
+                    PatientModel.HashTable_Add("CQ", patient);
+                    ViewBag.Result = "Paciente ingresado exitosamente";
+                    ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("CQ");
+                    if (Storage.Instance.PatientHashTable.isFull("CQ"))
+                    {
+                        ViewBag.CamasDisponibles = "[ -- ]";
+                    }
+                    return View(Storage.Instance.PatientHashTable.ToList("CQ"));
+                }
+                else
+                {
+                    ViewBag.Result = "Camas llenas, el paciente permance en la cola";
+                    ViewBag.CamasDisponibles = "[ -- ]";
+                    return View(Storage.Instance.PatientHashTable.ToList("CQ"));
+                }
             }
             catch
             {
@@ -260,6 +364,10 @@ namespace COVID_19.Controllers
         public ActionResult Admin_Peten()
         {
             ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("PE");
+            if (Storage.Instance.PatientHashTable.isFull("PE"))
+            {
+                ViewBag.CamasDisponibles = "[ -- ]";
+            }
             return View(Storage.Instance.PatientHashTable.ToList("PE"));
         }
 
@@ -269,7 +377,30 @@ namespace COVID_19.Controllers
             try
             {
                 //AGREGAR INSERCION DEL HEAP
-                return View();
+                if (Storage.Instance.Heap_PE_C.Count == 0)
+                {
+                    ViewBag.Result = "Cola de confirmados vacia";
+                    ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("PE");
+                    return View(Storage.Instance.PatientHashTable.ToList("PE"));
+                }
+                if (!Storage.Instance.PatientHashTable.isFull("PE"))
+                {
+                    PatientModel patient = Storage.Instance.Heap_PE_C.RemoveRoot();
+                    PatientModel.HashTable_Add("PE", patient);
+                    ViewBag.Result = "Paciente ingresado exitosamente";
+                    ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("PE");
+                    if (Storage.Instance.PatientHashTable.isFull("PE"))
+                    {
+                        ViewBag.CamasDisponibles = "[ -- ]";
+                    }
+                    return View(Storage.Instance.PatientHashTable.ToList("PE"));
+                }
+                else
+                {
+                    ViewBag.Result = "Camas llenas, el paciente permance en la cola";
+                    ViewBag.CamasDisponibles = "[ -- ]";
+                    return View(Storage.Instance.PatientHashTable.ToList("PE"));
+                }
             }
             catch
             {

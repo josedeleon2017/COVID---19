@@ -144,6 +144,10 @@ namespace NoLinealStructures.Structures
         public bool isFull(string key)
         {
             int count = 0;
+            if (!Dictionary.ContainsKey(key))
+            {
+                return false;
+            }
             for (int i = 0; i < Dictionary[key].Length; i++)
             {
                 if (Dictionary[key][i] != null)

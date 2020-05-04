@@ -32,7 +32,6 @@ namespace NoLinealStructures.Structures
                     Count++;
                     if ((int)GetPriorityValue.DynamicInvoke(node.Value) > (int)GetPriorityValue.DynamicInvoke(Root.Value))
                     {
-
                         SwapNodeValue(Root, node);
                     }
                     else if ((int)GetPriorityValue.DynamicInvoke(node.Value) == (int)GetPriorityValue.DynamicInvoke(Root.Value) && (int)DateComparison.DynamicInvoke(node.Value, Root.Value) == -1)

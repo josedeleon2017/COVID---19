@@ -170,8 +170,8 @@ namespace COVID_19.Models
         //DELEGATES
         public static Comparison<PersonModel> CUIComparison = delegate (PersonModel person1, PersonModel person2)
         {
-            if (Convert.ToInt32(person1.CUI) > Convert.ToInt32(person2.CUI)) return 1;
-            if (Convert.ToInt32(person1.CUI) < Convert.ToInt32(person2.CUI)) return -1;
+            if (Convert.ToInt64(person1.CUI) > Convert.ToInt64(person2.CUI)) return 1;
+            if (Convert.ToInt64(person1.CUI) < Convert.ToInt64(person2.CUI)) return -1;
             return 0;
         };
 
