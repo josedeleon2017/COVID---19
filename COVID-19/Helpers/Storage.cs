@@ -25,8 +25,14 @@ namespace COVID_19.Helpers
         ///</summary>
         public bool first_load = true;
 
-        //ESTRUCTURAS
+        /// <summary>
+        /// Cantidades numércias del estatus de todos los pacientes para el uso en las estadísticas
+        /// </summary>
+        public int statsRecuperados = 0;
+        public int statsConfirmados = 0;
+        public int statsSospechosos = 0;
 
+        //ESTRUCTURAS
 
         /// <summary>
         /// Árbol AVL de personas, sirve como primer filtro para la búsqueda de pacientes (llave CUI)

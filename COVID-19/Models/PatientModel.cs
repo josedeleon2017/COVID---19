@@ -190,6 +190,21 @@ namespace COVID_19.Models
             return sintomas;
         }
 
+        public static int PruebaCovid(int pbase)
+        {
+            Random random = new Random();
+            int resultado= random.Next(0,5);
+            switch(resultado)
+            {
+                case (0): return pbase+5;
+                case (1): return pbase+10;
+                case (2): return pbase+15;
+                case (3): return pbase+30;
+                case (4): return pbase+5;
+                default: return -1;
+            }
+        }
+
         //INSERT TREE
         public static void Tree_Add(PatientModel patient)
         {
@@ -226,6 +241,7 @@ namespace COVID_19.Models
         {
             if (patient.Estatus == "SOSPECHOSO")
             {
+                Storage.Instance.statsSospechosos++;
                 if (patient.Hospital == "Guatemala")
                 {
                     Storage.Instance.Heap_GU_S.GetPriorityValue = GetPriorityValue;
@@ -273,6 +289,7 @@ namespace COVID_19.Models
             }
             if(patient.Estatus == "CONFIRMADO")
             {
+                Storage.Instance.statsConfirmados++;
                 if (patient.Hospital == "Guatemala")
                 {
                     Storage.Instance.Heap_GU_C.GetPriorityValue = GetPriorityValue;
@@ -319,6 +336,10 @@ namespace COVID_19.Models
                     return;
                 }
             }
+            if(patient.Estatus == "RECUPERADO")
+            {
+                Storage.Instance.statsRecuperados++;
+            }
 
         }
 
@@ -336,6 +357,8 @@ namespace COVID_19.Models
         {
             return Patient1.FechaDeIngreso.CompareTo(Patient2.FechaDeIngreso);
         };
+
+
 
     }
 }

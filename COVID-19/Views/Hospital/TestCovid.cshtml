@@ -1,0 +1,112 @@
+﻿@model COVID_19.Models.PatientModel
+
+@{
+    ViewBag.Title = "TestCovid";
+}
+
+<ul class="breadcrumb">
+    <li>@Html.ActionLink("Inicio", "Index", "Home")</li>
+    <li>@Html.ActionLink("Simulación", "Simulation", "Hospital")</li>
+    <li class="active">Test Covid-19</li>
+</ul>
+
+<h2>TEST COVID-19</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-3">
+        <h4><span class="text-danger">*</span>Seleccione el hospital a realizar pruebas de Covid-19</h4>
+        <br />
+        <center>
+            @using (Html.BeginForm())
+            {
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <div class="btn-group-vertical">
+                            <button type="submit" class="btn btn-primary" name="GU">Guatemala</button>
+                            <button type="submit" class="btn btn-primary" name="ES">Escuintla</button>
+                            <button type="submit" class="btn btn-primary" name="QZ">Quetzaltenango</button>
+                            <button type="submit" class="btn btn-primary" name="CQ">Chiquimula</button>
+                            <button type="submit" class="btn btn-primary" name="PE">Petén</button>
+                        </div>
+                    </div>
+                </form>
+            }
+        </center>
+    </div>
+
+    <div class="col-md-9">
+        <h4>@ViewBag.estatus</h4>
+        <br />
+        <center>
+            <img src="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png" height="165">
+        </center>
+        <br />
+
+        <center>
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">RESULTADO</h3>
+                </div>
+                <div class="panel-body">
+                    <h4>@ViewBag.result</h4>
+                </div>
+            </div>
+        </center>
+
+        <div class="row">
+            <div class="col-md-7">
+                <div class="list-group">
+                    <a class="list-group-item">
+                        <h6 class="list-group-item-heading">Nombre</h6>
+                        <p class="list-group-item-text">@Html.DisplayFor(model => model.Nombre)</p>
+                    </a>
+                    <a class="list-group-item">
+                        <h6 class="list-group-item-heading">Apellido</h6>
+                        <p class="list-group-item-text">@Html.DisplayFor(model => model.Apellido)</p>
+                    </a>
+                    <a class="list-group-item">
+                        <h6 class="list-group-item-heading">CUI</h6>
+                        <p class="list-group-item-text">@Html.DisplayFor(model => model.CUI)</p>
+                    </a>
+                    <a class="list-group-item">
+                        <h6 class="list-group-item-heading">Departamento</h6>
+                        <p class="list-group-item-text">@Html.DisplayFor(model => model.Departamento)</p>
+                    </a>
+                    <a class="list-group-item">
+                        <h6 class="list-group-item-heading">Municipio</h6>
+                        <p class="list-group-item-text">@Html.DisplayFor(model => model.Municipio)</p>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="list-group">
+                    <a class="list-group-item">
+                        <h6 class="list-group-item-heading">Hospital</h6>
+                        <p class="list-group-item-text">@Html.DisplayFor(model => model.Hospital)</p>
+                    </a>
+                    <a class="list-group-item">
+                        <h6 class="list-group-item-heading">Prioridad</h6>
+                        <p class="list-group-item-text">@Html.DisplayFor(model => model.Prioridad)</p>
+                    </a>
+                    <a class="list-group-item">
+                        <h6 class="list-group-item-heading">Fecha de ingreso</h6>
+                        <p class="list-group-item-text">@Html.DisplayFor(model => model.FechaDeIngreso)</p>
+                    </a>
+                    <a class="list-group-item">
+                        <h6 class="list-group-item-heading">Categoria</h6>
+                        <p class="list-group-item-text">@Html.DisplayFor(model => model.Categoria)</p>
+                    </a>
+                    <a class="list-group-item">
+                        <h6 class="list-group-item-heading">Estatus</h6>
+                        <p class="list-group-item-text">@Html.DisplayFor(model => model.Estatus)</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+

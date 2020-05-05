@@ -178,6 +178,7 @@
     <Content Include="Views\Hospital\Admin_Quetzaltenango.cshtml" />
     <Content Include="Views\Hospital\Admin_Chiquimula.cshtml" />
     <Content Include="Views\Hospital\Admin_Peten.cshtml" />
+    <Content Include="Views\Hospital\TestCovid.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
