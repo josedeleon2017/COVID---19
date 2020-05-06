@@ -145,7 +145,7 @@ namespace COVID_19.Models
 
         public static string AsignarHospital(string Departamento)
         {
-            string DepartamentoNormalizado = RemoverAcentos(Departamento.ToLower()).ToUpper();
+            string DepartamentoNormalizado = RemoverAcentos(Departamento.ToLower()).ToUpper().Trim();
             switch (DepartamentoNormalizado)
             {
                 case ("PETEN"): return "Petén";

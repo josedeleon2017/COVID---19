@@ -82,30 +82,9 @@ namespace COVID_19.Controllers
                                 PatientModel.Heap_Add(currentPatient);
                             }
                         }
-                    }                  
+                    }
+                    Storage.Instance.first_load = false;
                 }
-                /*
-                PatientModel person1 = new PatientModel { CUI="51" };
-                PatientModel person2 = new PatientModel { CUI = "91" };
-                PatientModel person3 = new PatientModel { CUI = "7" };
-                PatientModel person4 = new PatientModel { CUI = "9" };
-                PatientModel person5 = new PatientModel { CUI = "99" };
-
-                PatientModel patient1 = PatientModel.Tree_Search(person1);
-                PatientModel patient2 = PatientModel.Tree_Search(person2);
-                PatientModel patient3 = PatientModel.Tree_Search(person3);
-                PatientModel patient4 = PatientModel.Tree_Search(person4);
-                PatientModel patient5 = PatientModel.Tree_Search(person5);
-
-                Storage.Instance.PatientHashTable.Add("GU", patient1);
-                Storage.Instance.PatientHashTable.Add("GU", patient2);
-                Storage.Instance.PatientHashTable.Add("GU", patient3);
-                Storage.Instance.PatientHashTable.Add("GU", patient4);
-                Storage.Instance.PatientHashTable.Add("GU", patient5);
-
-                int firstIndicator = Storage.Instance.PatientHashTable.CountEmptys("GU");
-                */
-                int indicator = Storage.Instance.PatientTree.ToInOrden().Where(x => x.Hospital == "Quetzaltenango").Where(x => x.Estatus == "CONFIRMADO").Count();
 
                 return View();
             }
@@ -136,44 +115,6 @@ namespace COVID_19.Controllers
             return View();
         }
 
-        public ActionResult TestCSV()
-        {
-            ViewBag.Message = "CSV";
-
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult TestCSV(HttpPostedFileBase postedfile)
-        {
-       
-            string FilePath;
-            if (postedfile != null)
-            {
-                string Path = Server.MapPath("~/App_Data/descripciones/");
-                if (!Directory.Exists(Path))
-                {
-                    Directory.CreateDirectory(Path);
-                }
-                FilePath = Path + System.IO.Path.GetFileName(postedfile.FileName);
-                postedfile.SaveAs(FilePath);
-
-
-                string Path_db = Server.MapPath("~/App_Data/");
-                if (!Directory.Exists(Path_db))
-                {
-                    Directory.CreateDirectory(Path_db);
-                }
-
-                string FilePath_db = Path_db + "words.csv";
-
-
-                string count = "";
-                count = PatientModel.ObtenerCoincidencias(FilePath, FilePath_db);
-
-               
-            }
-            return View();
-        }
+        
     }
 }
