@@ -19,11 +19,13 @@ namespace COVID_19.Models
         public string Hospital { get; set; }
         public DateTime FechaDeIngreso { get; set; }
 
+        ///<!--MANEJO DEL TIPO DE DATO-------------------------------------------------------------------->
+
         /// <summary>
         /// Compara y concatena las palabras conincidentes de dos archivos CSV 
         /// </summary>
-        /// <param name="path"></param>
-        /// <param name="pathdb"></param>
+        /// <param name="path">Direccion del archivo adjunto a comparar</param>
+        /// <param name="pathdb">Direccion del archivo que contiente los criterios de comparación</param>
         /// <returns>Palabras clave definidas por pathdb</returns>
         public static string ObtenerCoincidencias(string path, string pathdb)
         {
@@ -57,8 +59,8 @@ namespace COVID_19.Models
         /// <summary>
         /// Descompone los atributos de la edad y asigna una prioridad según su estatus
         /// </summary>
-        /// <param name="Edad"></param>
-        /// <param name="Estatus"></param>
+        /// <param name="Edad">Edad del paciente</param>
+        /// <param name="Estatus">Estatus del paciente</param>
         /// <returns>El número de prioridad</returns>
         public static int AsignarPrioridad(string Edad, string Estatus)
         {
@@ -124,7 +126,7 @@ namespace COVID_19.Models
         /// <summary>
         /// Describe la definición de la prioridad en texto
         /// </summary>
-        /// <param name="Prioridad"></param>
+        /// <param name="Prioridad">Número representativo del grado de prioridad</param>
         /// <returns>La descripción de la prioridad</returns>
         public static string DescripcionPrioridad(int Prioridad)
         {
@@ -143,6 +145,11 @@ namespace COVID_19.Models
             }
         }
 
+        /// <summary>
+        /// Asigna el departamento con hospital mas cercano según el departamento donde se encuentre
+        /// </summary>
+        /// <param name="Departamento">Departamento del paciente</param>
+        /// <returns>El nombre del departamento con hospital mas cercano</returns>
         public static string AsignarHospital(string Departamento)
         {
             string DepartamentoNormalizado = RemoverAcentos(Departamento.ToLower()).ToUpper().Trim();
@@ -179,6 +186,15 @@ namespace COVID_19.Models
             }
         }
 
+        /// <summary>
+        /// Convierte a texto las respuestas marcadas de los sintomas del paciente
+        /// </summary>
+        /// <param name="indicador1">Resultado de marcar o no el sintoma 1</param>
+        /// <param name="indicador2">Resultado de marcar o no el sintoma 2</param>
+        /// <param name="indicador3">Resultado de marcar o no el sintoma 3</param>
+        /// <param name="indicador4">Resultado de marcar o no el sintoma 4</param>
+        /// <param name="indicador5">Resultado de marcar o no el sintoma 5</param>
+        /// <returns>Todos los sintomas marcados, concatenados en un solo texto</returns>
         public static string DescripcionSintomas(string indicador1, string indicador2, string indicador3, string indicador4, string indicador5)
         {
             string sintomas = "";
@@ -190,8 +206,13 @@ namespace COVID_19.Models
             return sintomas;
         }
 
-        public static int PruebaCovid(int pbase)
+        /// <summary>
+        /// Genera un resultado aleatorio entre 5 posibles escenarios
+        /// </summary>
+        /// <returns>Un número con dos decimales representado el resultado aleatorio</returns>
+        public static double PruebaCovid()
         {
+            double pbase = Convert.ToDouble(50);
             Random random = new Random();
             int resultado= random.Next(0,5);
             switch(resultado)
@@ -200,48 +221,104 @@ namespace COVID_19.Models
                 case (1): return pbase+10;
                 case (2): return pbase+15;
                 case (3): return pbase+30;
-                case (4): return pbase+5;
+                case (4): return pbase+5.5;
                 default: return -1;
             }
         }
 
-        //INSERT TREE
+        /// <summary>
+        /// Devuelve la descripción larga del resultado de la prueba de covid-19
+        /// </summary>
+        /// <param name="resultado">Valor númerico de del resultado de la prueba de covid-19</param>
+        /// <returns>La descripción del posible resultado de la prueba</returns>
+        public static string DescripcionResultado(double resultado)
+        {
+            if (resultado == 55.00) return "Probabilidad base 5%";
+            if (resultado == 60.00) return "Viaje a Europa +10%";
+            if (resultado == 65.00) return "Conocido contagiado +15%";
+            if (resultado == 80.00) return "Familiar contagiado +30%";
+            if (resultado == 55.5) return "Reuniones sociales con sospechosos +5%";
+            return "";
+        }
+
+        /// <summary>
+        /// Cuenta la cantidad de incidencias de un mismo estatus
+        /// </summary>
+        /// <param name="patient">Paciente a registrar su estatus</param>
+        public static void CountEstatus(PatientModel patient)
+        {
+            if (patient.Estatus == "SOSPECHOSO")
+            {
+                Storage.Instance.statsSospechosos++;
+            }
+            if (patient.Estatus == "CONFIRMADO")
+            {
+                Storage.Instance.statsConfirmados++;
+            }
+            if (patient.Estatus == "RECUPERADO")
+            {
+                Storage.Instance.statsRecuperados++;
+            }
+        }
+
+        ///<!--ESTRUCTURAS----------------------------------------------------------------------------------------->
+
+        /// <summary>
+        /// Inserción en el árbol de pacientes
+        /// </summary>
+        /// <param name="patient">Paciente a ingresar</param>
         public static void Tree_Add(PatientModel patient)
         {
             Storage.Instance.PatientTree.Comparer = CUIComparison;
             Storage.Instance.PatientTree.Root = Storage.Instance.PatientTree.InsertAVL(Storage.Instance.PatientTree.Root, patient);
         }
 
-        //SEARCH TREE               
+        /// <summary>
+        /// Busqueda en el árbol de pacientes por llave
+        /// </summary>
+        /// <param name="patient">Paciente a buscar</param>     
         public static PatientModel Tree_Search(PatientModel key)
         {
             Storage.Instance.PatientTree.Comparer = CUIComparison;
             return Storage.Instance.PatientTree.Find(key);
         }
 
-        //HASH
-        public static void HashTable_Add(string key, PatientModel patient)
+        /// <summary>
+        /// Inserción en el Dictionary generico
+        /// </summary>
+        /// <param name="patient"></param>
+        public static void HashAdd(PatientModel patient)
         {
-            Storage.Instance.PatientHashTable.Add(key,patient);
-        }
-        public static void HashTable_Delete(string key, string datakey)
-        {
-            Storage.Instance.PatientHashTable.Comparer = PatientComparison;
-            Storage.Instance.PatientHashTable.Remove(key, datakey);
+            if (GetHash(patient.Hospital) == -1)
+            {
+                return;
+            }
+            else
+            {
+                Storage.Instance.Hashfinal.Add(GetHash(patient.Hospital), patient);
+            }
         }
 
-        public static Func<PatientModel, string, int> PatientComparison = delegate (PatientModel patient, string cui)
+        /// <summary>
+        /// Eliminación del Dictionary generico
+        /// </summary>
+        /// <param name="key">posición del dato</param>
+        /// <param name="datakey">llave única del dato</param>
+        public static void HashRemove(string key, string datakey)
         {
-            if (patient.CUI == cui) return 0;
-            return -1;
-        };
+            Storage.Instance.Hashfinal.Comparer = PatientComparison;
+            Storage.Instance.Hashfinal.Remove(GetHash(key), datakey);
+        }
 
-        //INSERT HEAP
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="patient"></param>
         public static void Heap_Add(PatientModel patient)
         {
             if (patient.Estatus == "SOSPECHOSO")
             {
-                Storage.Instance.statsSospechosos++;
+                Storage.Instance.statsSimulationSospechosos++;
                 if (patient.Hospital == "Guatemala")
                 {
                     Storage.Instance.Heap_GU_S.GetPriorityValue = GetPriorityValue;
@@ -256,7 +333,6 @@ namespace COVID_19.Models
                     Storage.Instance.Heap_ES_S.Comparer = PatientHeapComparison;
                     Storage.Instance.Heap_ES_S.DateComparison = PatientDateComparison;
                     Storage.Instance.Heap_ES_S.Add(patient);
-                    //guardar heap de sospechosos de escuintla
                     return;
                 }
                 if (patient.Hospital == "Petén")
@@ -265,7 +341,6 @@ namespace COVID_19.Models
                     Storage.Instance.Heap_PE_S.Comparer = PatientHeapComparison;
                     Storage.Instance.Heap_PE_S.DateComparison = PatientDateComparison;
                     Storage.Instance.Heap_PE_S.Add(patient);
-                    //guardar heap de sospechosos de peten
                     return;
                 }
                 if (patient.Hospital == "Quetzaltenango")
@@ -274,7 +349,6 @@ namespace COVID_19.Models
                     Storage.Instance.Heap_QZ_S.Comparer = PatientHeapComparison;
                     Storage.Instance.Heap_QZ_S.DateComparison = PatientDateComparison;
                     Storage.Instance.Heap_QZ_S.Add(patient);
-                    //guardar heap de sospechosos de quetzaltenango
                     return;
                 }
                 if (patient.Hospital == "Chiquimula")
@@ -283,20 +357,18 @@ namespace COVID_19.Models
                     Storage.Instance.Heap_CQ_S.Comparer = PatientHeapComparison;
                     Storage.Instance.Heap_CQ_S.DateComparison = PatientDateComparison;
                     Storage.Instance.Heap_CQ_S.Add(patient);
-                    //guardar heap de sospechosos de chiquimula
                     return;
                 }
             }
             if(patient.Estatus == "CONFIRMADO")
             {
-                Storage.Instance.statsConfirmados++;
+                Storage.Instance.statsSimulationConfirmados++;
                 if (patient.Hospital == "Guatemala")
                 {
                     Storage.Instance.Heap_GU_C.GetPriorityValue = GetPriorityValue;
                     Storage.Instance.Heap_GU_C.Comparer = PatientHeapComparison;
                     Storage.Instance.Heap_GU_C.DateComparison = PatientDateComparison;
                     Storage.Instance.Heap_GU_C.Add(patient);
-                    //guardar heap de confirmados de guate
                     return;
                 }
                 if (patient.Hospital == "Escuintla")
@@ -305,7 +377,6 @@ namespace COVID_19.Models
                     Storage.Instance.Heap_ES_C.Comparer = PatientHeapComparison;
                     Storage.Instance.Heap_ES_C.DateComparison = PatientDateComparison;
                     Storage.Instance.Heap_ES_C.Add(patient);
-                    //guardar heap de confirmados de escuintla
                     return;
                 }
                 if (patient.Hospital == "Petén")
@@ -314,7 +385,6 @@ namespace COVID_19.Models
                     Storage.Instance.Heap_PE_C.Comparer = PatientHeapComparison;
                     Storage.Instance.Heap_PE_C.DateComparison = PatientDateComparison;
                     Storage.Instance.Heap_PE_C.Add(patient);
-                    //guardar heap de confirmados de peten
                     return;
                 }
                 if (patient.Hospital == "Quetzaltenango")
@@ -323,7 +393,6 @@ namespace COVID_19.Models
                     Storage.Instance.Heap_QZ_C.Comparer = PatientHeapComparison;
                     Storage.Instance.Heap_QZ_C.DateComparison = PatientDateComparison;
                     Storage.Instance.Heap_QZ_C.Add(patient);
-                    //guardar heap de confirmados de quetzaltenango
                     return;
                 }
                 if (patient.Hospital == "Chiquimula")
@@ -332,33 +401,61 @@ namespace COVID_19.Models
                     Storage.Instance.Heap_CQ_C.Comparer = PatientHeapComparison;
                     Storage.Instance.Heap_CQ_C.DateComparison = PatientDateComparison;
                     Storage.Instance.Heap_CQ_C.Add(patient);
-                    //guardar heap de confirmados de chiquimula
                     return;
                 }
             }
-            if(patient.Estatus == "RECUPERADO")
-            {
-                Storage.Instance.statsRecuperados++;
-            }
-
         }
 
+        /// <summary>
+        /// Devuelve la posición de almacenamiento en el Dictionary genérico
+        /// </summary>
+        /// <param name="KeyCode">Llave única de identificación</param>
+        /// <returns>La posición de la llave en el Dictionary</returns>
+        public static int GetHash(string KeyCode)
+        {
+            if (KeyCode == "Guatemala" || KeyCode == "GU") return 0;
+            if (KeyCode == "Escuintla" || KeyCode == "ES") return 1;
+            if (KeyCode == "Chiquimula" || KeyCode == "CQ") return 2;
+            if (KeyCode == "Quetzaltenango" || KeyCode == "QZ") return 3;
+            if (KeyCode == "Petén" || KeyCode == "PE") return 4;
+            return -1;
+        }
+
+        ///<!--DELGADOS---------------------------------------------------------------------------------------------------------------->
+
+
+        /// <summary>
+        /// Compara el número de CUI de cada paciente
+        /// </summary>
+        public static Func<PatientModel, string, int> PatientComparison = delegate (PatientModel patient, string cui)
+        {
+            if (patient.CUI == cui) return 0;
+            return -1;
+        };
+
+        /// <summary>
+        /// 
+        /// </summary>
         public static Func<PatientModel, int> GetPriorityValue = delegate (PatientModel Patient)
         {
             return Patient.Prioridad;
         };
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static Comparison<PatientModel> PatientHeapComparison = delegate (PatientModel Patient1, PatientModel Patient2)
         {
             return Patient1.CUI.CompareTo(Patient2.CUI);
         };
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static Comparison<PatientModel> PatientDateComparison = delegate (PatientModel Patient1, PatientModel Patient2)
         {
             return Patient1.FechaDeIngreso.CompareTo(Patient2.FechaDeIngreso);
-        };
-
-
+        };       
 
     }
 }

@@ -19,11 +19,14 @@ namespace COVID_19.Helpers
             }
         }
 
-        ///<!--MANEJO DEL CSV-->
+        ///<!--MANEJO DEL CSV-------------------------------------------------------------------->
+
         ///<summary>
         ///Validador primera carga de data.cvs
         ///</summary>
         public bool first_load = true;
+
+        ///<!--ESTADÍSTICAS---------------------------------------------------------------------->
 
         /// <summary>
         /// Cantidades numércias del estatus de todos los pacientes para el uso en las estadísticas
@@ -32,7 +35,19 @@ namespace COVID_19.Helpers
         public int statsConfirmados = 0;
         public int statsSospechosos = 0;
 
-        //ESTRUCTURAS
+        /// <summary>
+        /// Cantidades numércias del estatus de todos los pacientes durante la simulación para el uso en las estadísticas
+        /// </summary>
+        public int statsSimulationRecuperados = 0;
+        public int statsSimulationConfirmados = 0;
+        public int statsSimulationSospechosos = 0;
+
+        ///<!--ESTRUCTURAS-------------------------------------------------------------------->
+
+        /// <summary>
+        /// Dictionary artesanal de pacientes, sirve para guardar los datos del hospital
+        /// </summary>
+        public NoLinealStructures.Structures.HashTable<PatientModel> Hashfinal = new NoLinealStructures.Structures.HashTable<PatientModel>();
 
         /// <summary>
         /// Árbol AVL de personas, sirve como primer filtro para la búsqueda de pacientes (llave CUI)
@@ -53,11 +68,6 @@ namespace COVID_19.Helpers
         /// Lista simplemente enlazada de personas, sirve para mostrar el resultado de la búsqueda o filtro
         /// </summary>
         public List<PersonModel> ResultList = new List<PersonModel>();
-
-        /// <summary>
-        /// Tabla Hash de pacientes, sirve para guardar los datos del hospital
-        /// </summary>
-        public NoLinealStructures.Structures.CustomDictionary<PatientModel> PatientHashTable = new NoLinealStructures.Structures.CustomDictionary<PatientModel>();
 
         /// <summary>
         /// Heap donde se guardan los pacientes confirmados asignados al hospital del departamento de Guatemala.

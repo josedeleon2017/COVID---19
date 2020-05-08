@@ -18,3 +18,8 @@ C:\Users\jamor\Desktop\COVID V3\COVID---19\NoLinealStructures\bin\Debug\NoLineal
 C:\Users\jamor\Desktop\COVID V3\COVID---19\NoLinealStructures\obj\Debug\NoLinealStructures.csprojAssemblyReference.cache
 C:\Users\jamor\Desktop\COVID V3\COVID---19\NoLinealStructures\obj\Debug\NoLinealStructures.dll
 C:\Users\jamor\Desktop\COVID V3\COVID---19\NoLinealStructures\obj\Debug\NoLinealStructures.pdb
+C:\Users\José De León\Desktop\martes\COVID---19\NoLinealStructures\bin\Debug\NoLinealStructures.dll
+C:\Users\José De León\Desktop\martes\COVID---19\NoLinealStructures\bin\Debug\NoLinealStructures.pdb
+C:\Users\José De León\Desktop\martes\COVID---19\NoLinealStructures\obj\Debug\NoLinealStructures.csprojAssemblyReference.cache
+C:\Users\José De León\Desktop\martes\COVID---19\NoLinealStructures\obj\Debug\NoLinealStructures.dll
+C:\Users\José De León\Desktop\martes\COVID---19\NoLinealStructures\obj\Debug\NoLinealStructures.pdb

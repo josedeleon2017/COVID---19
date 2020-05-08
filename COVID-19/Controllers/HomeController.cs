@@ -80,12 +80,13 @@ namespace COVID_19.Controllers
                                 PersonModel.CustomTree_Add(currentPerson);
                                 PatientModel.Tree_Add(currentPatient);
                                 PatientModel.Heap_Add(currentPatient);
+                                PatientModel.CountEstatus(currentPatient);
                             }
                         }
                     }
                     Storage.Instance.first_load = false;
-                }
-
+                    Storage.Instance.Hashfinal.Inicializar();
+                }              
                 return View();
             }
             catch

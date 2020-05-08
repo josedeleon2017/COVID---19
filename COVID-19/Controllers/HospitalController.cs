@@ -95,22 +95,26 @@ namespace COVID_19.Controllers
             int Recuperados = Storage.Instance.statsRecuperados;
             double Porcentaje = Convert.ToDouble(Confirmados) / (Convert.ToDouble(Confirmados) + Convert.ToDouble(Recuperados)) * 100;
 
-            Storage.Instance.PatientHashTable.Add("GU", null);
-            Storage.Instance.PatientHashTable.Add("ES", null);
-            Storage.Instance.PatientHashTable.Add("QZ", null);
-            Storage.Instance.PatientHashTable.Add("CQ", null);
-            Storage.Instance.PatientHashTable.Add("PE", null);
+            int Sospechosos_simulation = Storage.Instance.statsSimulationSospechosos;
+            int Confirmados_simulation = Storage.Instance.statsSimulationConfirmados;
+            int Recuperados_simulation = Storage.Instance.statsSimulationRecuperados;
+            double Porcentaje_simulation = Convert.ToDouble(Confirmados_simulation) / (Convert.ToDouble(Confirmados_simulation) + Convert.ToDouble(Recuperados_simulation)) * 100;
 
             ViewBag.Sospechosos = Sospechosos;
             ViewBag.Confirmados = Confirmados;
             ViewBag.Porcentaje = Convert.ToString(Math.Round(Porcentaje, 2)) + "%";
             ViewBag.Recuperados = Recuperados;
 
-            ViewBag.HospitalGuatemala = Storage.Instance.PatientHashTable.CountEmptys("GU");
-            ViewBag.HospitalEscuintla = Storage.Instance.PatientHashTable.CountEmptys("ES");
-            ViewBag.HospitalQuetzaltenango = Storage.Instance.PatientHashTable.CountEmptys("QZ");
-            ViewBag.HospitalChiquimula = Storage.Instance.PatientHashTable.CountEmptys("CQ");
-            ViewBag.HospitalPeten = Storage.Instance.PatientHashTable.CountEmptys("PE");
+            ViewBag.Sospechosos_simulation = Sospechosos_simulation;
+            ViewBag.Confirmados_simulation = Confirmados_simulation;
+            ViewBag.Porcentaje_simulation = Convert.ToString(Math.Round(Porcentaje_simulation, 2)) + "%";
+            ViewBag.Recuperados_simulation = Recuperados_simulation;
+
+            ViewBag.HospitalGuatemala = Storage.Instance.Hashfinal.CountEmptys(PatientModel.GetHash("GU"));
+            ViewBag.HospitalEscuintla = Storage.Instance.Hashfinal.CountEmptys(PatientModel.GetHash("ES"));
+            ViewBag.HospitalQuetzaltenango = Storage.Instance.Hashfinal.CountEmptys(PatientModel.GetHash("QZ"));
+            ViewBag.HospitalChiquimula = Storage.Instance.Hashfinal.CountEmptys(PatientModel.GetHash("CQ"));
+            ViewBag.HospitalPeten = Storage.Instance.Hashfinal.CountEmptys(PatientModel.GetHash("PE"));
             return View();
         }
 
@@ -125,10 +129,19 @@ namespace COVID_19.Controllers
             try
             {
                 string HashCode = collection["Hash"];
-                if (Storage.Instance.PatientHashTable.Contains(HashCode.Substring(0, 2)))
+                if (PatientModel.GetHash(HashCode.Substring(0, 2))!=-1)
                 {
                     ViewBag.Result = "[ " + HashCode + " ]";
-                    PatientModel patientResult = Storage.Instance.PatientHashTable.Find(HashCode);
+                    int position = 0;
+                    if (HashCode.Contains("10"))
+                    {
+                       position = 1 + Convert.ToInt32(HashCode.Substring(3, 2));
+                    }
+                    else
+                    {
+                        position = 1 + Convert.ToInt32(HashCode.Substring(3, 1));
+                    }
+                    PatientModel patientResult = Storage.Instance.Hashfinal.Find(PatientModel.GetHash(HashCode.Substring(0, 2)), position);
                     if (patientResult == null)
                     {
                         ViewBag.Result = "[ CAMA VACÍA ]";
@@ -150,13 +163,14 @@ namespace COVID_19.Controllers
 
         public ActionResult Admin_Guatemala()
         {
-            ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("GU");
+            ViewBag.CamasDisponibles = Storage.Instance.Hashfinal.Positions(PatientModel.GetHash("GU"));
             ViewBag.Estatus= "PERSONAS EN ESPERA ["+Storage.Instance.Heap_GU_C.Count+"]";
-            if (Storage.Instance.PatientHashTable.isFull("GU"))
+            if (Storage.Instance.Hashfinal.IsFull(PatientModel.GetHash("GU")))
             {
                 ViewBag.CamasDisponibles = "[ -- ]";
             }
-            return View(Storage.Instance.PatientHashTable.ToList("GU"));
+            ViewBag.Result = "Personas hospitalizadas ["+Storage.Instance.Hashfinal.Count(PatientModel.GetHash("GU"))+"] ";
+            return View(Storage.Instance.Hashfinal.ToList(PatientModel.GetHash("GU")));
         }
 
         [HttpPost]
@@ -169,28 +183,28 @@ namespace COVID_19.Controllers
                 {
                     ViewBag.Estatus = "PERSONAS EN ESPERA [" + Storage.Instance.Heap_GU_C.Count + "]";
                     ViewBag.Result = "Cola de confirmados vacia";
-                    ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("GU");
-                    return View(Storage.Instance.PatientHashTable.ToList("GU"));
+                    ViewBag.CamasDisponibles = Storage.Instance.Hashfinal.Positions(PatientModel.GetHash("GU"));
+                    return View(Storage.Instance.Hashfinal.ToList(PatientModel.GetHash("GU")));
                 }
-                if (!Storage.Instance.PatientHashTable.isFull("GU"))
+                if (!Storage.Instance.Hashfinal.IsFull(PatientModel.GetHash("GU")))
                 {
                     PatientModel patient = Storage.Instance.Heap_GU_C.RemoveRoot();
-                    PatientModel.HashTable_Add("GU", patient);
+                    PatientModel.HashAdd(patient);
                     ViewBag.Result = "Paciente ingresado exitosamente";
-                    ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("GU");
-                    if (Storage.Instance.PatientHashTable.isFull("GU"))
+                    ViewBag.CamasDisponibles = Storage.Instance.Hashfinal.Positions(PatientModel.GetHash("GU"));
+                    if (Storage.Instance.Hashfinal.IsFull(PatientModel.GetHash("GU")))
                     {
                         ViewBag.CamasDisponibles = "[ -- ]";
                     }
                     ViewBag.Estatus = "PERSONAS EN ESPERA [" + Storage.Instance.Heap_GU_C.Count + "]";
-                    return View(Storage.Instance.PatientHashTable.ToList("GU"));
+                    return View(Storage.Instance.Hashfinal.ToList(PatientModel.GetHash("GU")));
                 }
                 else
                 {
                     ViewBag.Result = "Camas llenas, el paciente permance en la cola";
                     ViewBag.CamasDisponibles = "[ -- ]";
                     ViewBag.Estatus = "PERSONAS EN ESPERA [" + Storage.Instance.Heap_GU_C.Count + "]";
-                    return View(Storage.Instance.PatientHashTable.ToList("GU"));
+                    return View(Storage.Instance.Hashfinal.ToList(PatientModel.GetHash("GU")));
                 }
             }
             catch
@@ -201,21 +215,22 @@ namespace COVID_19.Controllers
 
         public ActionResult Remove_Guatemala(string id)
         {
-            PatientModel.HashTable_Delete("GU", id);
-            Storage.Instance.statsRecuperados++;
+            PatientModel.HashRemove("GU", id);
+            Storage.Instance.statsSimulationRecuperados++;
             return RedirectToAction("Admin_Guatemala");
         }
 
 
         public ActionResult Admin_Escuintla()
         {
-            ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("ES");
+            ViewBag.CamasDisponibles = Storage.Instance.Hashfinal.Positions(PatientModel.GetHash("ES"));
             ViewBag.Estatus = "PERSONAS EN ESPERA [" + Storage.Instance.Heap_ES_C.Count + "]";
-            if (Storage.Instance.PatientHashTable.isFull("ES"))
+            if (Storage.Instance.Hashfinal.IsFull(PatientModel.GetHash("ES")))
             {
                 ViewBag.CamasDisponibles = "[ -- ]";
             }
-            return View(Storage.Instance.PatientHashTable.ToList("ES"));
+            ViewBag.Result = "Personas hospitalizadas [" + Storage.Instance.Hashfinal.Count(PatientModel.GetHash("ES")) + "] ";
+            return View(Storage.Instance.Hashfinal.ToList(PatientModel.GetHash("ES")));
         }
 
         [HttpPost]
@@ -228,28 +243,28 @@ namespace COVID_19.Controllers
                 {
                     ViewBag.Estatus = "PERSONAS EN ESPERA [" + Storage.Instance.Heap_ES_C.Count + "]";
                     ViewBag.Result = "Cola de confirmados vacia";
-                    ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("ES");
-                    return View(Storage.Instance.PatientHashTable.ToList("ES"));
+                    ViewBag.CamasDisponibles = Storage.Instance.Hashfinal.Positions(PatientModel.GetHash("ES"));
+                    return View(Storage.Instance.Hashfinal.ToList(PatientModel.GetHash("ES")));
                 }
-                if (!Storage.Instance.PatientHashTable.isFull("ES"))
+                if (!Storage.Instance.Hashfinal.IsFull(PatientModel.GetHash("ES")))
                 {
                     PatientModel patient = Storage.Instance.Heap_ES_C.RemoveRoot();
-                    PatientModel.HashTable_Add("ES", patient);
+                    PatientModel.HashAdd(patient);
                     ViewBag.Result = "Paciente ingresado exitosamente";
-                    ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("ES");
-                    if (Storage.Instance.PatientHashTable.isFull("ES"))
+                    ViewBag.CamasDisponibles = Storage.Instance.Hashfinal.Positions(PatientModel.GetHash("ES"));
+                    if (Storage.Instance.Hashfinal.IsFull(PatientModel.GetHash("ES")))
                     {
                         ViewBag.CamasDisponibles = "[ -- ]";
                     }
                     ViewBag.Estatus = "PERSONAS EN ESPERA [" + Storage.Instance.Heap_ES_C.Count + "]";
-                    return View(Storage.Instance.PatientHashTable.ToList("ES"));
+                    return View(Storage.Instance.Hashfinal.ToList(PatientModel.GetHash("ES")));
                 }
                 else
                 {
                     ViewBag.Result = "Camas llenas, el paciente permance en la cola";
                     ViewBag.CamasDisponibles = "[ -- ]";
                     ViewBag.Estatus = "PERSONAS EN ESPERA [" + Storage.Instance.Heap_ES_C.Count + "]";
-                    return View(Storage.Instance.PatientHashTable.ToList("ES"));
+                    return View(Storage.Instance.Hashfinal.ToList(PatientModel.GetHash("ES")));
                 }
             }
             catch
@@ -260,20 +275,21 @@ namespace COVID_19.Controllers
 
         public ActionResult Remove_Escuintla(string id)
         {
-            PatientModel.HashTable_Delete("ES", id);
-            Storage.Instance.statsRecuperados++;
+            PatientModel.HashRemove("ES", id);
+            Storage.Instance.statsSimulationRecuperados++;
             return RedirectToAction("Admin_Escuintla");
         }
 
         public ActionResult Admin_Quetzaltenango()
         {
-            ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("QZ");
+            ViewBag.CamasDisponibles = Storage.Instance.Hashfinal.Positions(PatientModel.GetHash("QZ"));
             ViewBag.Estatus = "PERSONAS EN ESPERA [" + Storage.Instance.Heap_QZ_C.Count + "]";
-            if (Storage.Instance.PatientHashTable.isFull("QZ"))
+            if (Storage.Instance.Hashfinal.IsFull(PatientModel.GetHash("QZ")))
             {
                 ViewBag.CamasDisponibles = "[ -- ]";
             }
-            return View(Storage.Instance.PatientHashTable.ToList("QZ"));
+            ViewBag.Result = "Personas hospitalizadas [" + Storage.Instance.Hashfinal.Count(PatientModel.GetHash("QZ")) + "] ";
+            return View(Storage.Instance.Hashfinal.ToList(PatientModel.GetHash("QZ")));
         }
 
         [HttpPost]
@@ -286,28 +302,28 @@ namespace COVID_19.Controllers
                 {
                     ViewBag.Estatus = "PERSONAS EN ESPERA [" + Storage.Instance.Heap_QZ_C.Count + "]";
                     ViewBag.Result = "Cola de confirmados vacia";
-                    ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("QZ");
-                    return View(Storage.Instance.PatientHashTable.ToList("QZ"));
+                    ViewBag.CamasDisponibles = Storage.Instance.Hashfinal.Positions(PatientModel.GetHash("QZ"));
+                    return View(Storage.Instance.Hashfinal.ToList(PatientModel.GetHash("QZ")));
                 }
-                if (!Storage.Instance.PatientHashTable.isFull("QZ"))
+                if (!Storage.Instance.Hashfinal.IsFull(PatientModel.GetHash("QZ")))
                 {
                     PatientModel patient = Storage.Instance.Heap_QZ_C.RemoveRoot();
-                    PatientModel.HashTable_Add("QZ", patient);
+                    PatientModel.HashAdd(patient);
                     ViewBag.Result = "Paciente ingresado exitosamente";
-                    ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("QZ");
-                    if (Storage.Instance.PatientHashTable.isFull("QZ"))
+                    ViewBag.CamasDisponibles = Storage.Instance.Hashfinal.Positions(PatientModel.GetHash("QZ"));
+                    if (Storage.Instance.Hashfinal.IsFull(PatientModel.GetHash("QZ")))
                     {
                         ViewBag.CamasDisponibles = "[ -- ]";
                     }
                     ViewBag.Estatus = "PERSONAS EN ESPERA [" + Storage.Instance.Heap_QZ_C.Count + "]";
-                    return View(Storage.Instance.PatientHashTable.ToList("QZ"));
+                    return View(Storage.Instance.Hashfinal.ToList(PatientModel.GetHash("QZ")));
                 }
                 else
                 {
                     ViewBag.Result = "Camas llenas, el paciente permance en la cola";
                     ViewBag.CamasDisponibles = "[ -- ]";
                     ViewBag.Estatus = "PERSONAS EN ESPERA [" + Storage.Instance.Heap_QZ_C.Count + "]";
-                    return View(Storage.Instance.PatientHashTable.ToList("QZ"));
+                    return View(Storage.Instance.Hashfinal.ToList(PatientModel.GetHash("QZ")));
                 }
             }
             catch
@@ -318,20 +334,21 @@ namespace COVID_19.Controllers
 
         public ActionResult Remove_Quetzaltenango(string id)
         {
-            PatientModel.HashTable_Delete("QZ", id);
-            Storage.Instance.statsRecuperados++;
+            PatientModel.HashRemove("QZ", id);
+            Storage.Instance.statsSimulationRecuperados++;
             return RedirectToAction("Admin_Quetzaltenango");
         }
 
         public ActionResult Admin_Chiquimula()
         {
-            ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("CQ");
+            ViewBag.CamasDisponibles = Storage.Instance.Hashfinal.Positions(PatientModel.GetHash("CQ"));
             ViewBag.Estatus = "PERSONAS EN ESPERA [" + Storage.Instance.Heap_CQ_C.Count + "]";
-            if (Storage.Instance.PatientHashTable.isFull("CQ"))
+            if (Storage.Instance.Hashfinal.IsFull(PatientModel.GetHash("CQ")))
             {
                 ViewBag.CamasDisponibles = "[ -- ]";
             }
-            return View(Storage.Instance.PatientHashTable.ToList("CQ"));
+            ViewBag.Result = "Personas hospitalizadas [" + Storage.Instance.Hashfinal.Count(PatientModel.GetHash("CQ")) + "] ";
+            return View(Storage.Instance.Hashfinal.ToList(PatientModel.GetHash("CQ")));
         }
 
         [HttpPost]
@@ -344,28 +361,28 @@ namespace COVID_19.Controllers
                 {
                     ViewBag.Estatus = "PERSONAS EN ESPERA [" + Storage.Instance.Heap_CQ_C.Count + "]";
                     ViewBag.Result = "Cola de confirmados vacia";
-                    ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("CQ");
-                    return View(Storage.Instance.PatientHashTable.ToList("CQ"));
+                    ViewBag.CamasDisponibles = Storage.Instance.Hashfinal.Positions(PatientModel.GetHash("CQ"));
+                    return View(Storage.Instance.Hashfinal.ToList(PatientModel.GetHash("CQ")));
                 }
-                if (!Storage.Instance.PatientHashTable.isFull("CQ"))
+                if (!Storage.Instance.Hashfinal.IsFull(PatientModel.GetHash("CQ")))
                 {
                     PatientModel patient = Storage.Instance.Heap_CQ_C.RemoveRoot();
-                    PatientModel.HashTable_Add("CQ", patient);
+                    PatientModel.HashAdd(patient);
                     ViewBag.Result = "Paciente ingresado exitosamente";
-                    ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("CQ");
-                    if (Storage.Instance.PatientHashTable.isFull("CQ"))
+                    ViewBag.CamasDisponibles = Storage.Instance.Hashfinal.Positions(PatientModel.GetHash("CQ"));
+                    if (Storage.Instance.Hashfinal.IsFull(PatientModel.GetHash("CQ")))
                     {
                         ViewBag.CamasDisponibles = "[ -- ]";
                     }
                     ViewBag.Estatus = "PERSONAS EN ESPERA [" + Storage.Instance.Heap_CQ_C.Count + "]";
-                    return View(Storage.Instance.PatientHashTable.ToList("CQ"));
+                    return View(Storage.Instance.Hashfinal.ToList(PatientModel.GetHash("CQ")));
                 }
                 else
                 {
                     ViewBag.Result = "Camas llenas, el paciente permance en la cola";
                     ViewBag.CamasDisponibles = "[ -- ]";
                     ViewBag.Estatus = "PERSONAS EN ESPERA [" + Storage.Instance.Heap_CQ_C.Count + "]";
-                    return View(Storage.Instance.PatientHashTable.ToList("CQ"));
+                    return View(Storage.Instance.Hashfinal.ToList(PatientModel.GetHash("CQ")));
                 }
             }
             catch
@@ -376,20 +393,21 @@ namespace COVID_19.Controllers
 
         public ActionResult Remove_Chiquimula(string id)
         {
-            PatientModel.HashTable_Delete("CQ", id);
-            Storage.Instance.statsRecuperados++;
+            PatientModel.HashRemove("CQ", id);
+            Storage.Instance.statsSimulationRecuperados++;
             return RedirectToAction("Admin_Chiquimula");
         }
 
         public ActionResult Admin_Peten()
         {
-            ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("PE");
+            ViewBag.CamasDisponibles = Storage.Instance.Hashfinal.Positions(PatientModel.GetHash("PE"));
             ViewBag.Estatus = "PERSONAS EN ESPERA [" + Storage.Instance.Heap_PE_C.Count + "]";
-            if (Storage.Instance.PatientHashTable.isFull("PE"))
+            if (Storage.Instance.Hashfinal.IsFull(PatientModel.GetHash("PE")))
             {
                 ViewBag.CamasDisponibles = "[ -- ]";
             }
-            return View(Storage.Instance.PatientHashTable.ToList("PE"));
+            ViewBag.Result = "Personas hospitalizadas [" + Storage.Instance.Hashfinal.Count(PatientModel.GetHash("PE")) + "] ";
+            return View(Storage.Instance.Hashfinal.ToList(PatientModel.GetHash("PE")));
         }
 
         [HttpPost]
@@ -402,28 +420,28 @@ namespace COVID_19.Controllers
                 {
                     ViewBag.Estatus = "PERSONAS EN ESPERA [" + Storage.Instance.Heap_PE_C.Count + "]";
                     ViewBag.Result = "Cola de confirmados vacia";
-                    ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("PE");
-                    return View(Storage.Instance.PatientHashTable.ToList("PE"));
+                    ViewBag.CamasDisponibles = Storage.Instance.Hashfinal.Positions(PatientModel.GetHash("PE"));
+                    return View(Storage.Instance.Hashfinal.ToList(PatientModel.GetHash("PE")));
                 }
-                if (!Storage.Instance.PatientHashTable.isFull("PE"))
+                if (!Storage.Instance.Hashfinal.IsFull(PatientModel.GetHash("PE")))
                 {
                     PatientModel patient = Storage.Instance.Heap_PE_C.RemoveRoot();
-                    PatientModel.HashTable_Add("PE", patient);
+                    PatientModel.HashAdd(patient);
                     ViewBag.Result = "Paciente ingresado exitosamente";
-                    ViewBag.CamasDisponibles = Storage.Instance.PatientHashTable.Positions("PE");
-                    if (Storage.Instance.PatientHashTable.isFull("PE"))
+                    ViewBag.CamasDisponibles = Storage.Instance.Hashfinal.Positions(PatientModel.GetHash("PE"));
+                    if (Storage.Instance.Hashfinal.IsFull(PatientModel.GetHash("PE")))
                     {
                         ViewBag.CamasDisponibles = "[ -- ]";
                     }
                     ViewBag.Estatus = "PERSONAS EN ESPERA [" + Storage.Instance.Heap_PE_C.Count + "]";
-                    return View(Storage.Instance.PatientHashTable.ToList("PE"));
+                    return View(Storage.Instance.Hashfinal.ToList(PatientModel.GetHash("PE")));
                 }
                 else
                 {
                     ViewBag.Result = "Camas llenas, el paciente permance en la cola";
                     ViewBag.CamasDisponibles = "[ -- ]";
                     ViewBag.Estatus = "PERSONAS EN ESPERA [" + Storage.Instance.Heap_PE_C.Count + "]";
-                    return View(Storage.Instance.PatientHashTable.ToList("PE"));
+                    return View(Storage.Instance.Hashfinal.ToList(PatientModel.GetHash("PE")));
                 }
             }
             catch
@@ -434,8 +452,8 @@ namespace COVID_19.Controllers
 
         public ActionResult Remove_Peten(string id)
         {
-            PatientModel.HashTable_Delete("PE", id);
-            Storage.Instance.statsRecuperados++;
+            PatientModel.HashRemove("PE", id);
+            Storage.Instance.statsSimulationRecuperados++;
             return RedirectToAction("Admin_Peten");
         }
 
@@ -449,7 +467,7 @@ namespace COVID_19.Controllers
         {
             try
             {
-                int resultado = 0;
+                double resultado;
                 PatientModel patient = new PatientModel();
                 if (collection.AllKeys.Contains("GU"))
                 {
@@ -458,23 +476,27 @@ namespace COVID_19.Controllers
                         ViewBag.estatus = "SIN PRUEBAS PENDIENTES POR REALIZAR";
                         return View(patient);
                     }
-                    resultado = PatientModel.PruebaCovid(50);
-                    if (resultado >= 65)
+                    resultado = PatientModel.PruebaCovid();
+                    if (resultado >= 60)
                     {
-                        ViewBag.result = "POSITIVO | "+resultado+"%";
+                        ViewBag.result = "POSITIVO   |  "+resultado + "% > 60%";
+                        ViewBag.descripcion = PatientModel.DescripcionResultado(resultado);
+                        Storage.Instance.statsSimulationConfirmados++;
                         patient = Storage.Instance.Heap_GU_S.RemoveRoot();
                         patient.Estatus = "CONFIRMADO";
-                        Storage.Instance.statsConfirmados++;
+                        patient.Prioridad = PatientModel.AsignarPrioridad(patient.Edad, patient.Estatus);
                         PatientModel.Heap_Add(patient);
                     }
                     else
                     {
-                        ViewBag.result = "NEGATIVO | " + resultado + "%";
-                        Storage.Instance.statsSospechosos--;
+                        ViewBag.result = "NEGATIVO   |  " + resultado + "% < 60%";
+                        ViewBag.descripcion = PatientModel.DescripcionResultado(resultado);
+                        Storage.Instance.statsSimulationSospechosos--;
                         patient = Storage.Instance.Heap_GU_S.RemoveRoot();
                     }
                     ViewBag.estatus = "PRUEBAS PENDIENTES HOSPITAL DE GUATEMALA ["+Storage.Instance.Heap_GU_S.Count+"]";
                 }
+                ///
                 if (collection.AllKeys.Contains("ES"))
                 {
                     if (Storage.Instance.Heap_ES_S.Count == 0)
@@ -482,23 +504,27 @@ namespace COVID_19.Controllers
                         ViewBag.estatus = "SIN PRUEBAS PENDIENTES POR REALIZAR";
                         return View(patient);
                     }
-                    resultado = PatientModel.PruebaCovid(50);
-                    if (resultado >= 65)
+                    resultado = PatientModel.PruebaCovid();
+                    if (resultado >= 60)
                     {
-                        ViewBag.result = "POSITIVO | " + resultado + "%";
+                        ViewBag.result = "POSITIVO   |  " + resultado + "% > 60%";
+                        ViewBag.descripcion = PatientModel.DescripcionResultado(resultado);
+                        Storage.Instance.statsSimulationConfirmados++;
                         patient = Storage.Instance.Heap_ES_S.RemoveRoot();
                         patient.Estatus = "CONFIRMADO";
-                        Storage.Instance.statsConfirmados++;
+                        patient.Prioridad = PatientModel.AsignarPrioridad(patient.Edad, patient.Estatus);
                         PatientModel.Heap_Add(patient);
                     }
                     else
                     {
-                        ViewBag.result = "NEGATIVO | " + resultado + "%";
-                        Storage.Instance.statsSospechosos--;
+                        ViewBag.result = "NEGATIVO   |  " + resultado + "% < 60%";
+                        ViewBag.descripcion = PatientModel.DescripcionResultado(resultado);
+                        Storage.Instance.statsSimulationSospechosos--;
                         patient = Storage.Instance.Heap_ES_S.RemoveRoot();
                     }
-                    ViewBag.estatus = "PRUEBAS PENDIENTES HOSPITAL DE ESUINTLA [" + Storage.Instance.Heap_ES_S.Count + "]";
+                    ViewBag.estatus = "PRUEBAS PENDIENTES HOSPITAL DE ESCUINTLA [" + Storage.Instance.Heap_ES_S.Count + "]";
                 }
+                ///
                 if (collection.AllKeys.Contains("QZ"))
                 {
                     if (Storage.Instance.Heap_QZ_S.Count == 0)
@@ -506,23 +532,27 @@ namespace COVID_19.Controllers
                         ViewBag.estatus = "SIN PRUEBAS PENDIENTES POR REALIZAR";
                         return View(patient);
                     }
-                    resultado = PatientModel.PruebaCovid(50);
-                    if (resultado >= 65)
+                    resultado = PatientModel.PruebaCovid();
+                    if (resultado >= 60)
                     {
-                        ViewBag.result = "POSITIVO | " + resultado + "%";
+                        ViewBag.result = "POSITIVO   |  " + resultado + "% > 60%";
+                        ViewBag.descripcion = PatientModel.DescripcionResultado(resultado);
+                        Storage.Instance.statsSimulationConfirmados++;
                         patient = Storage.Instance.Heap_QZ_S.RemoveRoot();
                         patient.Estatus = "CONFIRMADO";
-                        Storage.Instance.statsConfirmados++;
+                        patient.Prioridad = PatientModel.AsignarPrioridad(patient.Edad, patient.Estatus);
                         PatientModel.Heap_Add(patient);
                     }
                     else
                     {
-                        ViewBag.result = "NEGATIVO | " + resultado + "%";
-                        Storage.Instance.statsSospechosos--;
+                        ViewBag.result = "NEGATIVO   |  " + resultado + "% < 60%";
+                        ViewBag.descripcion = PatientModel.DescripcionResultado(resultado);
+                        Storage.Instance.statsSimulationSospechosos--;
                         patient = Storage.Instance.Heap_QZ_S.RemoveRoot();
                     }
                     ViewBag.estatus = "PRUEBAS PENDIENTES HOSPITAL DE QUETZALTENANGO [" + Storage.Instance.Heap_QZ_S.Count + "]";
                 }
+                ///
                 if (collection.AllKeys.Contains("CQ"))
                 {
                     if (Storage.Instance.Heap_CQ_S.Count == 0)
@@ -530,23 +560,27 @@ namespace COVID_19.Controllers
                         ViewBag.estatus = "SIN PRUEBAS PENDIENTES POR REALIZAR";
                         return View(patient);
                     }
-                    resultado = PatientModel.PruebaCovid(50);
-                    if (resultado >= 65)
+                    resultado = PatientModel.PruebaCovid();
+                    if (resultado >= 60)
                     {
-                        ViewBag.result = "POSITIVO | " + resultado + "%";
+                        ViewBag.result = "POSITIVO   |  " + resultado + "% > 60%";
+                        ViewBag.descripcion = PatientModel.DescripcionResultado(resultado);
+                        Storage.Instance.statsSimulationConfirmados++;
                         patient = Storage.Instance.Heap_CQ_S.RemoveRoot();
                         patient.Estatus = "CONFIRMADO";
-                        Storage.Instance.statsConfirmados++;
+                        patient.Prioridad = PatientModel.AsignarPrioridad(patient.Edad, patient.Estatus);
                         PatientModel.Heap_Add(patient);
                     }
                     else
                     {
-                        ViewBag.result = "NEGATIVO | " + resultado + "%";
-                        Storage.Instance.statsSospechosos--;
+                        ViewBag.result = "NEGATIVO   |  " + resultado + "% < 60%";
+                        ViewBag.descripcion = PatientModel.DescripcionResultado(resultado);
+                        Storage.Instance.statsSimulationSospechosos--;
                         patient = Storage.Instance.Heap_CQ_S.RemoveRoot();
                     }
                     ViewBag.estatus = "PRUEBAS PENDIENTES HOSPITAL DE CHIQUIMULA [" + Storage.Instance.Heap_CQ_S.Count + "]";
                 }
+                ///
                 if (collection.AllKeys.Contains("PE"))
                 {
                     if (Storage.Instance.Heap_PE_S.Count == 0)
@@ -554,19 +588,22 @@ namespace COVID_19.Controllers
                         ViewBag.estatus = "SIN PRUEBAS PENDIENTES POR REALIZAR";
                         return View(patient);
                     }
-                    resultado = PatientModel.PruebaCovid(50);
-                    if (resultado >= 65)
+                    resultado = PatientModel.PruebaCovid();
+                    if (resultado >= 60)
                     {
-                        ViewBag.result = "POSITIVO | " + resultado + "%";
+                        ViewBag.result = "POSITIVO   |  " + resultado + "% > 60%";
+                        ViewBag.descripcion = PatientModel.DescripcionResultado(resultado);
+                        Storage.Instance.statsSimulationConfirmados++;
                         patient = Storage.Instance.Heap_PE_S.RemoveRoot();
                         patient.Estatus = "CONFIRMADO";
-                        Storage.Instance.statsConfirmados++;
+                        patient.Prioridad = PatientModel.AsignarPrioridad(patient.Edad, patient.Estatus);
                         PatientModel.Heap_Add(patient);
                     }
                     else
                     {
-                        ViewBag.result = "NEGATIVO | " + resultado + "%";
-                        Storage.Instance.statsSospechosos--;
+                        ViewBag.result = "NEGATIVO   |  " + resultado + "% < 60%";
+                        ViewBag.descripcion = PatientModel.DescripcionResultado(resultado);
+                        Storage.Instance.statsSimulationSospechosos--;
                         patient = Storage.Instance.Heap_PE_S.RemoveRoot();
                     }
                     ViewBag.estatus = "PRUEBAS PENDIENTES HOSPITAL DE PETÉN [" + Storage.Instance.Heap_PE_S.Count + "]";
