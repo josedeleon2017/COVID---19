@@ -311,11 +311,12 @@ namespace COVID_19.Models
         }
 
         /// <summary>
-        /// 
+        /// Inserción de paciente a cola de prioridad (Heap) 
         /// </summary>
         /// <param name="patient"></param>
         public static void Heap_Add(PatientModel patient)
         {
+            //Filtrado por estatus sospechoso.
             if (patient.Estatus == "SOSPECHOSO")
             {
                 Storage.Instance.statsSimulationSospechosos++;
@@ -360,7 +361,8 @@ namespace COVID_19.Models
                     return;
                 }
             }
-            if(patient.Estatus == "CONFIRMADO")
+            //Filtrado por status confirmado
+            if (patient.Estatus == "CONFIRMADO")
             {
                 Storage.Instance.statsSimulationConfirmados++;
                 if (patient.Hospital == "Guatemala")
@@ -404,6 +406,7 @@ namespace COVID_19.Models
                     return;
                 }
             }
+            //Filtrado por status recuperado
             if (patient.Estatus == "RECUPERADO")
             {
                 Storage.Instance.statsSimulationRecuperados++;
@@ -438,7 +441,7 @@ namespace COVID_19.Models
         };
 
         /// <summary>
-        /// 
+        /// Devuelve el valor de prioridad de un paciente.
         /// </summary>
         public static Func<PatientModel, int> GetPriorityValue = delegate (PatientModel Patient)
         {
@@ -446,7 +449,7 @@ namespace COVID_19.Models
         };
 
         /// <summary>
-        /// 
+        /// Compara el CUI de dos pacientes.
         /// </summary>
         public static Comparison<PatientModel> PatientHeapComparison = delegate (PatientModel Patient1, PatientModel Patient2)
         {
@@ -454,7 +457,7 @@ namespace COVID_19.Models
         };
 
         /// <summary>
-        /// 
+        /// Compara la fecha de ingreso de dos pacientes.
         /// </summary>
         public static Comparison<PatientModel> PatientDateComparison = delegate (PatientModel Patient1, PatientModel Patient2)
         {

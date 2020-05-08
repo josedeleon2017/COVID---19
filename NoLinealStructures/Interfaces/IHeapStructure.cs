@@ -10,7 +10,7 @@ namespace NoLinealStructures.Interfaces
     interface IHeapStructure<T>
     {
         void Add(T value);
-        int Find(T value);
+        void Clear();
         T RemoveRoot();
     }
 }
