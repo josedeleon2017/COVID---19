@@ -100,15 +100,20 @@ namespace COVID_19.Controllers
         public ActionResult NewEntry(FormCollection collection, HttpPostedFileBase postedfile)
         {
             try
-            {
+            {                
                 if(collection["Nombre"] == "" || 
                    collection["Apellido"] == "" ||
                    collection["FechaDeNacimiento"] == "" ||
                    collection["CUI"] == "" ||
                    collection["Departamento"] == "" ||
-                   collection["Municipio"] == "")
+                   collection["Municipio"] == "") 
                 {
                     ViewBag.Result = "Debe llenar todos los campos requeridos";
+                    return View();
+                }
+                if (!collection.AllKeys.Contains("Departamento"))
+                {
+                    ViewBag.Result = "Debe seleccionar el departamento de residencia";
                     return View();
                 }
                 string currentDescription = "";
@@ -205,7 +210,7 @@ namespace COVID_19.Controllers
                 PersonModel.CustomTree_Add(currentPerson);
                 PatientModel.Tree_Add(currentPatient);
                 PatientModel.Heap_Add(currentPatient);
-
+                ViewBag.Result = "Persona registrada exitosamente";
                 return View();
             }
             catch

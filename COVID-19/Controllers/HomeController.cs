@@ -86,7 +86,7 @@ namespace COVID_19.Controllers
                     }
                     Storage.Instance.first_load = false;
                     Storage.Instance.Hashfinal.Inicializar();
-                }              
+                }
                 return View();
             }
             catch

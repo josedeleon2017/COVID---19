@@ -135,11 +135,11 @@ namespace COVID_19.Controllers
                     int position = 0;
                     if (HashCode.Contains("10"))
                     {
-                       position = 1 + Convert.ToInt32(HashCode.Substring(3, 2));
+                       position = Convert.ToInt32(HashCode.Substring(3, 2)) -1;
                     }
                     else
                     {
-                        position = 1 + Convert.ToInt32(HashCode.Substring(3, 1));
+                        position = Convert.ToInt32(HashCode.Substring(3, 1)) -1;
                     }
                     PatientModel patientResult = Storage.Instance.Hashfinal.Find(PatientModel.GetHash(HashCode.Substring(0, 2)), position);
                     if (patientResult == null)
@@ -479,12 +479,13 @@ namespace COVID_19.Controllers
                     resultado = PatientModel.PruebaCovid();
                     if (resultado >= 60)
                     {
-                        ViewBag.result = "POSITIVO   |  "+resultado + "% > 60%";
+                        ViewBag.result = "POSITIVO   |  "+resultado + "% >= 60%";
                         ViewBag.descripcion = PatientModel.DescripcionResultado(resultado);
                         Storage.Instance.statsSimulationConfirmados++;
                         patient = Storage.Instance.Heap_GU_S.RemoveRoot();
                         patient.Estatus = "CONFIRMADO";
                         patient.Prioridad = PatientModel.AsignarPrioridad(patient.Edad, patient.Estatus);
+                        patient.Categoria = PatientModel.DescripcionPrioridad(patient.Prioridad);
                         PatientModel.Heap_Add(patient);
                     }
                     else
@@ -507,12 +508,13 @@ namespace COVID_19.Controllers
                     resultado = PatientModel.PruebaCovid();
                     if (resultado >= 60)
                     {
-                        ViewBag.result = "POSITIVO   |  " + resultado + "% > 60%";
+                        ViewBag.result = "POSITIVO   |  " + resultado + "% >= 60%";
                         ViewBag.descripcion = PatientModel.DescripcionResultado(resultado);
                         Storage.Instance.statsSimulationConfirmados++;
                         patient = Storage.Instance.Heap_ES_S.RemoveRoot();
                         patient.Estatus = "CONFIRMADO";
                         patient.Prioridad = PatientModel.AsignarPrioridad(patient.Edad, patient.Estatus);
+                        patient.Categoria = PatientModel.DescripcionPrioridad(patient.Prioridad);
                         PatientModel.Heap_Add(patient);
                     }
                     else
@@ -535,12 +537,13 @@ namespace COVID_19.Controllers
                     resultado = PatientModel.PruebaCovid();
                     if (resultado >= 60)
                     {
-                        ViewBag.result = "POSITIVO   |  " + resultado + "% > 60%";
+                        ViewBag.result = "POSITIVO   |  " + resultado + "% >= 60%";
                         ViewBag.descripcion = PatientModel.DescripcionResultado(resultado);
                         Storage.Instance.statsSimulationConfirmados++;
                         patient = Storage.Instance.Heap_QZ_S.RemoveRoot();
                         patient.Estatus = "CONFIRMADO";
                         patient.Prioridad = PatientModel.AsignarPrioridad(patient.Edad, patient.Estatus);
+                        patient.Categoria = PatientModel.DescripcionPrioridad(patient.Prioridad);
                         PatientModel.Heap_Add(patient);
                     }
                     else
@@ -563,12 +566,13 @@ namespace COVID_19.Controllers
                     resultado = PatientModel.PruebaCovid();
                     if (resultado >= 60)
                     {
-                        ViewBag.result = "POSITIVO   |  " + resultado + "% > 60%";
+                        ViewBag.result = "POSITIVO   |  " + resultado + "% >= 60%";
                         ViewBag.descripcion = PatientModel.DescripcionResultado(resultado);
                         Storage.Instance.statsSimulationConfirmados++;
                         patient = Storage.Instance.Heap_CQ_S.RemoveRoot();
                         patient.Estatus = "CONFIRMADO";
                         patient.Prioridad = PatientModel.AsignarPrioridad(patient.Edad, patient.Estatus);
+                        patient.Categoria = PatientModel.DescripcionPrioridad(patient.Prioridad);
                         PatientModel.Heap_Add(patient);
                     }
                     else
@@ -591,12 +595,13 @@ namespace COVID_19.Controllers
                     resultado = PatientModel.PruebaCovid();
                     if (resultado >= 60)
                     {
-                        ViewBag.result = "POSITIVO   |  " + resultado + "% > 60%";
+                        ViewBag.result = "POSITIVO   |  " + resultado + "% >= 60%";
                         ViewBag.descripcion = PatientModel.DescripcionResultado(resultado);
                         Storage.Instance.statsSimulationConfirmados++;
                         patient = Storage.Instance.Heap_PE_S.RemoveRoot();
                         patient.Estatus = "CONFIRMADO";
                         patient.Prioridad = PatientModel.AsignarPrioridad(patient.Edad, patient.Estatus);
+                        patient.Categoria = PatientModel.DescripcionPrioridad(patient.Prioridad);
                         PatientModel.Heap_Add(patient);
                     }
                     else

@@ -133,7 +133,7 @@ namespace COVID_19.Controllers
                     string key = Nombre + Apellido;
                     Stopwatch stopWatch = new Stopwatch();
                     stopWatch.Start();
-                    Storage.Instance.ResultList = PersonModel.CustomTree_Filter(key).Where(x => x.Nombre == Nombre && x.Apellido == Apellido).ToList();
+                    Storage.Instance.ResultList = PersonModel.CustomTree_FilterNA(key).Where(x => x.Nombre == Nombre && x.Apellido == Apellido).ToList();
                     stopWatch.Stop();
                     TimeSpan ts = stopWatch.Elapsed;
                     string elapsedTime = Convert.ToString(ts.TotalMilliseconds);

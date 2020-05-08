@@ -192,7 +192,27 @@ namespace COVID_19.Models
         {
             Storage.Instance.CustomPersonTree.Comparer = PersonComparison;
             PersonModel person = Storage.Instance.CustomPersonTree.Root.Value;
-            if (person.Nombre.CompareTo(key) == 1)
+            if (person.Apellido.CompareTo(key) == 1)
+            {
+                return Storage.Instance.CustomPersonTree.Filter(false);
+            }
+            else
+            {
+                return Storage.Instance.CustomPersonTree.Filter(true);
+            }
+        }
+
+        /// <summary>
+        /// Filtra el árbol según el criterio especificado
+        /// </summary>
+        /// <param name="key">Apellido o ambos para filtrar el árbol</param>
+        /// <returns></returns>
+        public static List<PersonModel> CustomTree_FilterNA(string key)
+        {
+            Storage.Instance.CustomPersonTree.Comparer = PersonComparison;
+            PersonModel person = Storage.Instance.CustomPersonTree.Root.Value;
+            string keyToCompare = person.Nombre + person.Apellido;
+            if (keyToCompare.CompareTo(key) == 1)
             {
                 return Storage.Instance.CustomPersonTree.Filter(false);
             }

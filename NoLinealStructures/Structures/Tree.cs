@@ -94,19 +94,13 @@ namespace NoLinealStructures.Structures
 
         int getFactor(Node<T> node)
         {
-            if (node == null)
-            {
-                return 0;
-            }
+            if (node == null) return 0;
             return node.Factor;
         }
 
         int getBalance(Node<T> node)
         {
-            if (node == null)
-            {
-                return 0;
-            }
+            if (node == null) return 0;
             return getFactor(node.Left) - getFactor(node.Right);
         }
 

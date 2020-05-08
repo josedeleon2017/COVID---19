@@ -9,11 +9,13 @@
 </ul>
 
 <h2>NUEVO REGISTRO</h2>
+
+<hr />
+
 <center>
     <h4>@ViewBag.Result</h4>
 </center>
-<hr />
-
+<br />
 @using (Html.BeginForm("NewEntry", "Patient", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <form class="form-horizontal">
