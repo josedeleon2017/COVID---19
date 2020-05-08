@@ -404,6 +404,10 @@ namespace COVID_19.Models
                     return;
                 }
             }
+            if (patient.Estatus == "RECUPERADO")
+            {
+                Storage.Instance.statsSimulationRecuperados++;
+            } 
         }
 
         /// <summary>

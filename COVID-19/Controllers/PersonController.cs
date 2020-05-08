@@ -114,29 +114,112 @@ namespace COVID_19.Controllers
                 if (CUI != "")
                 {
                     PersonModel personToSearch = new PersonModel { CUI = CUI };
+                    if (PersonModel.Tree_Search(personToSearch) == null)
+                    {
+                        ViewBag.Result = "No se encontraron resultados";
+                        return View(Storage.Instance.ResultList);
+                    }
+                    Stopwatch stopWatch = new Stopwatch();
+                    stopWatch.Start();
                     Storage.Instance.ResultList.Add(PersonModel.Tree_Search(personToSearch));
+                    stopWatch.Stop();
+                    TimeSpan ts = stopWatch.Elapsed;
+                    string elapsedTime = Convert.ToString(ts.TotalMilliseconds);
+                    ViewBag.Query = "Consulta realizada en " + elapsedTime + " ms";
                     return View(Storage.Instance.ResultList);
                 }
                 if (Nombre != "" && Apellido != "")
                 {
                     string key = Nombre + Apellido;
-                    Storage.Instance.ResultList = PersonModel.CustomTree_Filter(key).Where(x=>x.Nombre==Nombre && x.Apellido==Apellido).ToList();
+                    Stopwatch stopWatch = new Stopwatch();
+                    stopWatch.Start();
+                    Storage.Instance.ResultList = PersonModel.CustomTree_Filter(key).Where(x => x.Nombre == Nombre && x.Apellido == Apellido).ToList();
+                    stopWatch.Stop();
+                    TimeSpan ts = stopWatch.Elapsed;
+                    string elapsedTime = Convert.ToString(ts.TotalMilliseconds);
+                    ViewBag.Query = "Consulta realizada en " + elapsedTime + " ms";
+                    if (Storage.Instance.ResultList.Count == 0)
+                    {
+                        ViewBag.Result = "No se encontraron resultados";
+                        return View(Storage.Instance.ResultList);
+                    }
                     return View(Storage.Instance.ResultList);
                 }
                 if (Nombre != "" || Apellido != "")
                 {
                     if (Nombre != "")
                     {
+                        Stopwatch stopWatch = new Stopwatch();
+                        stopWatch.Start();
                         Storage.Instance.ResultList = PersonModel.CustomTree_Filter(Nombre).Where(x => x.Nombre == Nombre).ToList();
+                        stopWatch.Stop();
+                        TimeSpan ts = stopWatch.Elapsed;
+                        string elapsedTime = Convert.ToString(ts.TotalMilliseconds);
+                        ViewBag.Query = "Consulta realizada en " + elapsedTime + " ms";
+                        if (Storage.Instance.ResultList.Count == 0)
+                        {
+                            ViewBag.Result = "No se encontraron resultados";
+                            return View(Storage.Instance.ResultList);
+                        }
                         return View(Storage.Instance.ResultList);
                     }
-                    else
+                    if (Apellido != "")
                     {
-                        Storage.Instance.ResultList = PersonModel.CustomTree_Filter(Apellido).Where(x => x.Apellido == Apellido).ToList();
+                        Stopwatch stopWatch = new Stopwatch();
+                        stopWatch.Start();
+                        Storage.Instance.ResultList = PersonModel.CustomTree_FilterA(Apellido).Where(x => x.Apellido == Apellido).ToList();
+                        stopWatch.Stop();
+                        TimeSpan ts = stopWatch.Elapsed;
+                        string elapsedTime = Convert.ToString(ts.TotalMilliseconds);
+                        ViewBag.Query = "Consulta realizada en " + elapsedTime + " ms";
+                        if (Storage.Instance.ResultList.Count == 0)
+                        {
+                            ViewBag.Result = "No se encontraron resultados";
+                            return View(Storage.Instance.ResultList);
+                        }
                         return View(Storage.Instance.ResultList);
                     }
                 }
-                return View();
+
+                ////Lista temporal con todos los datos
+                //List<PersonModel> temporalList = Storage.Instance.PersonTree.ToInOrden();
+                //int count = 0;
+                //for (int i = 0; i < temporalList.Count(); i++)
+                //{
+                //    PersonModel currentPerson = temporalList.ElementAt(i);
+
+                //    int count1 = 0;
+                //    int count2 = 0;
+
+                //    //Filtrado artesanal
+                //    Stopwatch stopWatch = new Stopwatch();
+                //    stopWatch.Start();
+                //    count1 = PersonModel.CustomTree_Filter(currentPerson.Nombre).Where(x => x.Nombre == currentPerson.Nombre).Count();
+                //    stopWatch.Stop();
+                //    TimeSpan ts = stopWatch.Elapsed;
+                //    string elapsedTime = Convert.ToString(ts.TotalMilliseconds);
+
+                //    //Filtrado de LINQ
+                //    Stopwatch stopWatch2 = new Stopwatch();
+                //    stopWatch2.Start();
+                //    count2 = Storage.Instance.PersonTree.ToInOrden().Where(x => x.Nombre == currentPerson.Nombre).Count();
+                //    stopWatch2.Stop();
+                //    TimeSpan ts2 = stopWatch2.Elapsed;
+                //    string elapsedTime2 = Convert.ToString(ts2.TotalMilliseconds);
+
+                //    //Si difieren en las cantidades resultantes devuelve un error
+                //    if (count1 != count2)
+                //    {
+                //        return View("Error");
+                //    }
+                //    //Cuenta el numero de veces que el filtrado artesanal es mas rapido que el de LINQ
+                //    if (Convert.ToDouble(elapsedTime) < Convert.ToDouble(elapsedTime2))
+                //    {
+                //        count++;
+                //    }
+
+                //}
+                return View(Storage.Instance.ResultList);
             }
             catch
             {

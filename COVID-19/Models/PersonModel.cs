@@ -167,7 +167,7 @@ namespace COVID_19.Models
         /// <summary>
         /// Filtra el árbol según el criterio especificado
         /// </summary>
-        /// <param name="key">Nombre, apellido o ambos para filtrar el árbol</param>
+        /// <param name="key">Nombre para filtrar el árbol</param>
         /// <returns></returns>
         public static List<PersonModel> CustomTree_Filter(string key)
         {
@@ -181,6 +181,25 @@ namespace COVID_19.Models
             {
                 return Storage.Instance.CustomPersonTree.Filter(true);
             }           
+        }
+
+        /// <summary>
+        /// Filtra el árbol según el criterio especificado
+        /// </summary>
+        /// <param name="key">Apellido o ambos para filtrar el árbol</param>
+        /// <returns></returns>
+        public static List<PersonModel> CustomTree_FilterA(string key)
+        {
+            Storage.Instance.CustomPersonTree.Comparer = PersonComparison;
+            PersonModel person = Storage.Instance.CustomPersonTree.Root.Value;
+            if (person.Nombre.CompareTo(key) == 1)
+            {
+                return Storage.Instance.CustomPersonTree.Filter(false);
+            }
+            else
+            {
+                return Storage.Instance.CustomPersonTree.Filter(true);
+            }
         }
 
         ///<!--DELGADOS---------------------------------------------------------------------------------------------------------------->
