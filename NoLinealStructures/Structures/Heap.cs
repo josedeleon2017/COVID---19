@@ -52,7 +52,6 @@ namespace NoLinealStructures.Structures
                     Count++;
                     if ((int)GetPriorityValue.DynamicInvoke(node.Value) < (int)GetPriorityValue.DynamicInvoke(Root.Value))
                     {
-
                         SwapNodeValue(Root, node);
                     }
                     else if ((int)GetPriorityValue.DynamicInvoke(node.Value) == (int)GetPriorityValue.DynamicInvoke(Root.Value) && (int)DateComparison.DynamicInvoke(node.Value, Root.Value) == -1)
@@ -128,14 +127,21 @@ namespace NoLinealStructures.Structures
                             if ((int)GetPriorityValue.DynamicInvoke(Next.Value) < (int)GetPriorityValue.DynamicInvoke(Parent.Value))
                             {
                                 SwapNodeValue(Parent, Next);
+                                Next = Parent;
+                                Parent = GetParent(Parent);
                             }
                             //Caso en el que la prioridad es igual pero debe hacerse cambio debido a fecha.
                             else if ((int)GetPriorityValue.DynamicInvoke(Next.Value) == (int)GetPriorityValue.DynamicInvoke(Parent.Value) && (int)DateComparison.DynamicInvoke(Next.Value, Parent.Value) == -1)
                             {
                                 SwapNodeValue(Parent, Next);
+                                Next = Parent;
+                                Parent = GetParent(Parent);
                             }
-                            Next = Parent;
-                            Parent = GetParent(Parent);
+                            //Caso que no hay cambio, ciclo se cierra.
+                            else
+                            {
+                                Parent = null;
+                            }
                         }
                     }
 
@@ -165,6 +171,7 @@ namespace NoLinealStructures.Structures
             //Caso en el que la estructura cuente con un elemento.
             else if (Count == 1)
             {
+                ReSort();
                 T result = Root.Value;
                 Clear();
                 return result;
@@ -172,6 +179,7 @@ namespace NoLinealStructures.Structures
             //Caso en el que la estructura tiene más de un elemento.
             else
             {
+                ReSort();
                 //Se guarda el valor de la raìz para retornarlo.
                 T result = Root.Value;
                 //Se sustituye el valor de la raíz por el del último nodo agregado.
@@ -203,7 +211,20 @@ namespace NoLinealStructures.Structures
         {
             //Se obtiene la raíz
             Node<T> Temp = Root;
-            //Ciclo que se asegura de que la raíz tenga al menos un subárbol.
+            if (Count == 2)
+            {
+                //Comparación por prioridad, si entra se hace cambio de valores.
+                if ((int)GetPriorityValue.DynamicInvoke(Root.Value) > (int)GetPriorityValue.DynamicInvoke(Root.Left.Value))
+                {
+                    SwapNodeValue(Root, Root.Left);
+                }
+                //Caso en el que la prioridad es igual pero debe hacerse cambio debido a fecha.
+                else if ((int)GetPriorityValue.DynamicInvoke(Root.Value) == (int)GetPriorityValue.DynamicInvoke(Root.Left.Value) && (int)DateComparison.DynamicInvoke(Temp.Value, Temp.Left.Value) == 1)
+                {
+                    SwapNodeValue(Root, Root.Left);
+                }
+            }
+            //Ciclo que se asegura de que la raíz tenga ambos subarboles
             while (Temp.Left != null && Temp.Right != null)
             {
                 //Caso en el que subarbol derecho sea nulo, por tanto unicamente hay subarbol izquierdo, esto debido a forma invariante.
